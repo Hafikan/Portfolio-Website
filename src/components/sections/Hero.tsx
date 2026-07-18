@@ -45,8 +45,8 @@ export default function Hero() {
       <section className="relative min-h-screen w-full flex items-center overflow-hidden opacity-0 pointer-events-none">
         <div className="absolute pointer-events-none select-none">
           <h1>Hafıkan Yeşilyurt.</h1>
-          <p>Architecting elite digital systems with uncompromising precision</p>
-          <p>Building the future of digital experiences.</p>
+          <p>Lorem ipsum dolor sit amet consectetur adipiscing elit</p>
+          <p>Sed do eiusmod tempor incididunt ut labore.</p>
         </div>
       </section>
     );
@@ -102,12 +102,12 @@ export default function Hero() {
 
         <FadeIn delay={0.2}>
           <h2 className="text-2xl font-medium tracking-tight text-zinc-400 mb-8 max-w-3xl mx-auto leading-tight">
-            Building the <span className="text-white font-semibold">future of digital</span> experiences.
+            Lorem ipsum <span className="text-white font-semibold">dolor sit amet</span> consectetur.
           </h2>
         </FadeIn>
 
         <TextReveal delay={1.0} className="text-lg text-muted mb-10 max-w-2xl mx-auto text-balance justify-center text-center">
-          Full stack developer specializing in high-performance apps with React Native, Flutter, and AI-driven products. Crafting minimal, premium interfaces.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud.
         </TextReveal>
 
         <FadeIn delay={0.4}>
@@ -234,7 +234,7 @@ export default function Hero() {
 
           <FadeIn delay={0.4} className="mt-auto mb-4 max-w-5xl">
             <p className="text-2xl md:text-3xl lg:text-4xl text-zinc-500 leading-tight font-light text-balance">
-              Architecting <span className="text-white font-semibold">elite digital systems</span> with <span className="text-emerald-400 italic font-medium">uncompromising precision</span>
+              Lorem ipsum <span className="text-white font-semibold">dolor sit amet</span> sed <span className="text-emerald-400 italic font-medium">consectetur adipiscing</span>
             </p>
           </FadeIn>
         </div>
@@ -280,7 +280,7 @@ export default function Hero() {
                   <div className="text-zinc-500 mb-1.5">$ whoami</div>
                   <div className="text-cyan-400 mb-3">hafikan_yesilyurt</div>
                   <div className="text-zinc-500 mb-1.5">$ get_status --current</div>
-                  <div className="text-white">Building high-performance apps...</div>
+                  <div className="text-white">Lorem ipsum dolor sit amet...</div>
                   <motion.div animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.8, repeat: Infinity }} className="w-2 h-3.5 bg-cyan-500 mt-2" />
                 </div>
               </div>
