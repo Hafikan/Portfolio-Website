@@ -58,7 +58,7 @@ const Contact = () => {
         </a>
 
         <a
-          href="https://github.com/Stewy8506"
+          href="https://github.com/Hafikan"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-4 p-4 rounded-xl glass-effect hover:border-zinc-700 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:-translate-y-1 transition-all group duration-300"
@@ -68,7 +68,7 @@ const Contact = () => {
           </div>
           <div>
             <p className="text-sm text-gray-400">GitHub</p>
-            <p className="text-lg font-medium">github.com/Stewy8506</p>
+            <p className="text-lg font-medium">github.com/Hafikan</p>
           </div>
         </a>
       </motion.div>

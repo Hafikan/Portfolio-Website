@@ -331,7 +331,7 @@ export default function Hero() {
             </div>
 
             <div className="flex items-center gap-8 mt-8 w-full justify-center">
-              <motion.a whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} href="https://github.com/Stewy8506" target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-emerald-400 transition-colors" onMouseEnter={playHover} onClick={playClick}><GitHubIcon className="w-7 h-7" /></motion.a>
+              <motion.a whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} href="https://github.com/Hafikan" target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-emerald-400 transition-colors" onMouseEnter={playHover} onClick={playClick}><GitHubIcon className="w-7 h-7" /></motion.a>
               <motion.a whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} href="https://www.linkedin.com/in/anv-dev/" target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-emerald-400 transition-colors" onMouseEnter={playHover} onClick={playClick}><LinkedInIcon className="w-7 h-7" /></motion.a>
               <motion.button whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} onMouseEnter={playHover} onClick={() => { playClick(); handleScroll("contact"); }} className="text-zinc-500 hover:text-emerald-400 transition-colors"><Mail className="w-7 h-7" /></motion.button>
             </div>
