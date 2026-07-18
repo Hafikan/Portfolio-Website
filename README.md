@@ -12,7 +12,7 @@
 > **Warning: This repository is a sentient environment.** If you are reading this, you have already initialized the session. You are now part of the ecosystem.
 
 > [!IMPORTANT]
-> **Proprietary & Private Source Notice:** This repository is the personal portfolio of Anuvab Das. All rights reserved. The source code, assets, UI designs, and system concepts are strictly proprietary. Copying, distributing, cloning, modifying, or redeploying this application (either in part or in whole) for public, commercial, or personal use is strictly prohibited.
+> **Proprietary & Private Source Notice:** This repository is the personal portfolio of Hafıkan Yeşilyurt. All rights reserved. The source code, assets, UI designs, and system concepts are strictly proprietary. Copying, distributing, cloning, modifying, or redeploying this application (either in part or in whole) for public, commercial, or personal use is strictly prohibited.
 
 ---
 
@@ -148,5 +148,5 @@ If you like the design, feel free to use it as inspiration to build your own uni
 
 ## 🧍‍♂️ Kernel Maintainer
 
-*   **Developer:** Anuvab Das (Stewy8506)
+*   **Developer:** Hafıkan Yeşilyurt (Hafikan)
 *   **Status:** Currently debugging a ghost loop that was fixed three builds ago.

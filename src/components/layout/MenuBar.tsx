@@ -108,17 +108,6 @@ export default function MenuBar() {
     File: [
       { label: "New Window", shortcut: "⌘N", action: () => { window.open(window.location.href, "_blank"); setActiveMenu(null); } },
       { divider: true, label: "" },
-      {
-        label: "Download Resume", shortcut: "⌘D", action: () => {
-          const link = document.createElement("a");
-          link.href = "/resume.pdf";
-          link.download = "Anuvab_Das_Resume.pdf";
-          link.click();
-          toast("Downloading resume...", "success");
-          setActiveMenu(null);
-        }
-      },
-      { divider: true, label: "" },
       { label: "Print...", shortcut: "⌘P", action: () => { window.print(); setActiveMenu(null); } },
       { label: "Close Window", shortcut: "⌘W", action: () => { toast("Cannot close main window.", "info"); setActiveMenu(null); } },
     ],

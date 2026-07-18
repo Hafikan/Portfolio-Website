@@ -12,8 +12,7 @@ export async function POST(req: Request) {
     // Allowed admin list
     const allowedAdminUsernames = [
       (process.env.GITHUB_ADMIN_USERNAME || "").toLowerCase(),
-      "stewy8506",
-      "anuvabdas"
+      "hafikan"
     ].filter(Boolean);
 
     const isAllowed = allowedAdminUsernames.includes(username.toLowerCase());

@@ -70,7 +70,6 @@ export default function TerminalWindow() {
           <ul className="grid grid-cols-2 gap-x-4 gap-y-1 my-2">
             <li><span className="text-emerald-300">about</span> - Who am I?</li>
             <li><span className="text-emerald-300">projects</span> - View my work</li>
-            <li><span className="text-emerald-300">resume</span> - Download PDF</li>
             <li><span className="text-emerald-300">contact</span> - Get in touch</li>
             <li><span className="text-emerald-300">clear</span> - Clear terminal</li>
             <li><span className="text-emerald-300">exit</span> - Close terminal</li>
@@ -94,14 +93,6 @@ export default function TerminalWindow() {
         output = "Navigating to Contact section...";
         scrollToSection("contact");
         setTimeout(() => closeWindow("terminal"), 800);
-        break;
-      case "resume":
-      case "cat resume.pdf":
-        output = "Downloading resume...";
-        const link = document.createElement("a");
-        link.href = "/resume.pdf";
-        link.download = "Anuvab_Resume.pdf";
-        link.click();
         break;
       case "clear":
         setHistory([]);

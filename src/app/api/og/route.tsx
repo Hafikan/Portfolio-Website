@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     // Dynamic params
     const title = searchParams.has('title')
       ? searchParams.get('title')?.slice(0, 100)
-      : 'Anuvab Das | Full Stack Developer';
+      : 'Hafıkan Yeşilyurt | Full Stack Developer';
     const description = searchParams.has('desc')
       ? searchParams.get('desc')?.slice(0, 150)
       : 'Premium portfolio of a full stack developer specializing in React Native, Flutter, and Next.js';

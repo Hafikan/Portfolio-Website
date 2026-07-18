@@ -9,12 +9,11 @@ export default function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: "Anuvab Das",
+    name: "Hafıkan Yeşilyurt",
     jobTitle: "Full Stack Developer",
     url: "https://yourportfolio.com", // update this with actual domain
     sameAs: [
-      "https://github.com/anuvabdas",
-      "https://linkedin.com/in/anuvabdas"
+      "https://github.com/Hafikan"
     ],
     description: "Full stack developer specializing in high-performance apps with React Native, Flutter, and Next.js.",
   };

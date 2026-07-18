@@ -4,7 +4,7 @@ import FadeIn from "@/components/ui/FadeIn";
 import { Monitor, Cpu, Keyboard, Headphones, Code2, Database } from "lucide-react";
 
 export const metadata = {
-  title: "Uses | Anuvab Das",
+  title: "Uses | Hafıkan Yeşilyurt",
   description: "A deep dive into my development environment, hardware, and software stack.",
 };
 

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import FadeIn from "../ui/FadeIn";
 import TextReveal from "../ui/TextReveal";
 import Button from "../ui/Button";
-import { ArrowRight, Download, TerminalSquare, Mail } from "lucide-react";
+import { ArrowRight, TerminalSquare, Mail } from "lucide-react";
 import { useSoundEffect } from "@/hooks/useSoundEffect";
 import Magnetic from "../ui/Magnetic";
 import { scrollToSection } from "@/lib/navigation";
@@ -44,7 +44,7 @@ export default function Hero() {
     return (
       <section className="relative min-h-screen w-full flex items-center overflow-hidden opacity-0 pointer-events-none">
         <div className="absolute pointer-events-none select-none">
-          <h1>Anuvab Das.</h1>
+          <h1>Hafıkan Yeşilyurt.</h1>
           <p>Architecting elite digital systems with uncompromising precision</p>
           <p>Building the future of digital experiences.</p>
         </div>
@@ -75,10 +75,10 @@ export default function Hero() {
                 className="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 to-emerald-400 select-none pointer-events-none"
                 style={{ filter: "blur(14px)", opacity: 0.3 }}
               >
-                Anuvab
+                Hafıkan
               </span>
               <span className="relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-emerald-200 to-emerald-500">
-                Anuvab
+                Hafıkan
               </span>
               <div className="absolute pointer-events-none z-10" style={{ top: "-15%", left: "6%", filter: "drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px rgba(34, 211, 238, 0.85))" }}>
                 <div className="sparkle-star" style={{ animationDelay: "0s" }} />
@@ -124,14 +124,6 @@ export default function Hero() {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Magnetic>
-            <Magnetic strength={0.2}>
-              <a href="/resume.pdf" download="Anuvab_Resume.pdf" tabIndex={-1} className="w-full flex" onMouseEnter={playHover} onClick={playClick}>
-                <Button variant="outline" className="group flex items-center justify-center gap-2 w-full whitespace-nowrap" data-cursor="button">
-                  Download Resume
-                  <Download className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
-                </Button>
-              </a>
-            </Magnetic>
           </div>
         </FadeIn>
       </div>
@@ -155,21 +147,21 @@ export default function Hero() {
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                 className="relative flex items-baseline overflow-visible"
               >
-                {"Anuvab Das.".split("").map((char, i) => {
-                  const isAnuvab = i >= 0 && i <= 5;
-                  const isSpace = i === 6;
-                  const isDas = i >= 7 && i <= 9;
-                  const isDot = i === 10;
+                {"Hafıkan Yeşilyurt.".split("").map((char, i) => {
+                  const isFirst = i >= 0 && i <= 6;
+                  const isSpace = i === 7;
+                  const isLast = i >= 8 && i <= 16;
+                  const isDot = i === 17;
 
                   let textStyles = "";
                   let hoverGlow = "";
 
-                  if (isAnuvab) {
+                  if (isFirst) {
                     textStyles = "font-black tracking-tight text-[13vw] sm:text-[10vw] xl:text-[8rem] 2xl:text-[9rem] bg-gradient-to-b from-cyan-100 via-cyan-300 to-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]";
                     hoverGlow = "brightness(1.5) drop-shadow(0px 0px 20px rgba(6,182,212,0.5))";
-                  } else if (isDas) {
-                    const isFirstOfDas = i === 7;
-                    textStyles = `font-quicksand font-light italic tracking-[0.02em] px-[0.15em] -mx-[0.15em] text-[11vw] sm:text-[8vw] xl:text-[6.4rem] 2xl:text-[7rem] bg-gradient-to-b from-white via-zinc-200 to-zinc-400 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] ${isFirstOfDas ? "ml-1" : ""}`;
+                  } else if (isLast) {
+                    const isFirstOfLast = i === 8;
+                    textStyles = `font-quicksand font-light italic tracking-[0.02em] px-[0.15em] -mx-[0.15em] text-[11vw] sm:text-[8vw] xl:text-[6.4rem] 2xl:text-[7rem] bg-gradient-to-b from-white via-zinc-200 to-zinc-400 drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] ${isFirstOfLast ? "ml-1" : ""}`;
                     hoverGlow = "brightness(1.4) drop-shadow(0px 0px 15px rgba(255,255,255,0.5))";
                   } else if (isDot) {
                     textStyles = "font-black text-[8vw] sm:text-[6vw] xl:text-[4rem] 2xl:text-[4.5rem] bg-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]";
@@ -182,9 +174,9 @@ export default function Hero() {
                     <motion.span
                       key={i}
                       className={`relative inline-block origin-bottom bg-clip-text text-transparent ${textStyles}`}
-                      data-cursor={isAnuvab ? "target" : undefined}
-                      onHoverStart={isAnuvab ? () => playClick() : undefined}
-                      whileHover={isAnuvab ? {
+                      data-cursor={isFirst ? "target" : undefined}
+                      onHoverStart={isFirst ? () => playClick() : undefined}
+                      whileHover={isFirst ? {
                         y: -14,
                         scale: 1.08,
                         rotateX: -10,
@@ -235,7 +227,7 @@ export default function Hero() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                 </div>
-                <span className="text-xs text-zinc-400 font-medium tracking-wide">Kolkata, India</span>
+                <span className="text-xs text-zinc-400 font-medium tracking-wide">İstanbul, Türkiye</span>
               </div>
             </FadeIn>
           </div>
@@ -286,7 +278,7 @@ export default function Hero() {
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
                   </div>
                   <div className="text-zinc-500 mb-1.5">$ whoami</div>
-                  <div className="text-cyan-400 mb-3">anuvab_das</div>
+                  <div className="text-cyan-400 mb-3">hafikan_yesilyurt</div>
                   <div className="text-zinc-500 mb-1.5">$ get_status --current</div>
                   <div className="text-white">Building high-performance apps...</div>
                   <motion.div animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.8, repeat: Infinity }} className="w-2 h-3.5 bg-cyan-500 mt-2" />
@@ -312,23 +304,6 @@ export default function Hero() {
                   <span className="font-bold tracking-widest uppercase text-sm">View_Projects</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
-              </Magnetic>
-
-              <Magnetic strength={0.1}>
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href="/resume.pdf"
-                  download="Anuvab_Resume.pdf"
-                  tabIndex={-1}
-                  onMouseEnter={playHover}
-                  onClick={playClick}
-                  className="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors"
-                >
-                  <span className="font-mono text-xs text-zinc-600 group-hover:text-white transition-colors">02.</span>
-                  <span className="font-bold tracking-widest uppercase text-sm">Download_CV</span>
-                  <Download className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
-                </motion.a>
               </Magnetic>
             </div>
 
