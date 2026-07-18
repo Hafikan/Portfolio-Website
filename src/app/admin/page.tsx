@@ -15,6 +15,7 @@ import {
   normalizeProjectCategory,
   normalizeSkillCategory,
 } from "@/lib/projects";
+import { SOCIAL_FIELDS, DEFAULT_SOCIALS, type Socials } from "@/lib/socials";
 
 type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
 type SkillCategory = (typeof SKILL_CATEGORIES)[number];
@@ -83,6 +84,8 @@ export default function AdminDashboard() {
   }, [projects, predefinedCategories]);
 
   const [employedStatus, setEmployedStatus] = useState<boolean | null>(null);
+  const [socials, setSocials] = useState<Socials>(DEFAULT_SOCIALS);
+  const [savingSocials, setSavingSocials] = useState(false);
 
   useEffect(() => {
     fetchProjects();
@@ -99,8 +102,31 @@ export default function AdminDashboard() {
         const parsed = data.categories.map((c: any) => typeof c === 'string' ? { name: c, imageType: "auto" } : c);
         setPredefinedCategories(parsed);
       }
+      if (data.socials) {
+        setSocials({ ...DEFAULT_SOCIALS, ...data.socials });
+      }
     } catch (error) {
       console.error("Failed to fetch config.");
+    }
+  };
+
+  const saveSocials = async () => {
+    setSavingSocials(true);
+    try {
+      const res = await fetch("/api/config", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ socials }),
+      });
+      if (res.ok) {
+        toast("Social links updated successfully.", "success");
+      } else {
+        toast("Failed to update social links.", "error");
+      }
+    } catch (error) {
+      toast("An error occurred while saving social links.", "error");
+    } finally {
+      setSavingSocials(false);
     }
   };
 
@@ -560,6 +586,37 @@ export default function AdminDashboard() {
                 No
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Social Links */}
+        <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 space-y-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col">
+              <span className="text-sm font-medium text-zinc-200">Social Links</span>
+              <span className="text-xs text-zinc-400">Shown in the Hero and Contact sections. Leave a field blank to hide it.</span>
+            </div>
+            <button
+              onClick={saveSocials}
+              disabled={savingSocials}
+              className="flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-100 text-zinc-900 font-medium hover:bg-zinc-200 transition-colors text-sm disabled:opacity-50 shrink-0"
+            >
+              <Save size={16} /> {savingSocials ? "Saving..." : "Save"}
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {SOCIAL_FIELDS.map((f) => (
+              <div key={f.key} className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-zinc-400">{f.label}</label>
+                <input
+                  type="text"
+                  value={socials[f.key]}
+                  onChange={(e) => setSocials((prev) => ({ ...prev, [f.key]: e.target.value }))}
+                  placeholder={f.placeholder}
+                  className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 text-sm focus:border-zinc-600 focus:outline-none transition-colors"
+                />
+              </div>
+            ))}
           </div>
         </div>
 

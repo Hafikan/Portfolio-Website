@@ -9,11 +9,13 @@ import { ArrowRight, Download, TerminalSquare, Mail } from "lucide-react";
 import { useSoundEffect } from "@/hooks/useSoundEffect";
 import Magnetic from "../ui/Magnetic";
 import { scrollToSection } from "@/lib/navigation";
-import { GitHubIcon, LinkedInIcon } from "../ui/BrandIcons";
+import { GitHubIcon, LinkedInIcon, TwitterIcon } from "../ui/BrandIcons";
 import { useLoading } from "../layout/ClientLayoutWrapper";
+import { useSocials } from "@/hooks/useSocials";
 
 export default function Hero() {
   const { playThocc, playHover, playClick } = useSoundEffect();
+  const socials = useSocials();
 
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
@@ -331,8 +333,15 @@ export default function Hero() {
             </div>
 
             <div className="flex items-center gap-8 mt-8 w-full justify-center">
-              <motion.a whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} href="https://github.com/Hafikan" target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-emerald-400 transition-colors" onMouseEnter={playHover} onClick={playClick}><GitHubIcon className="w-7 h-7" /></motion.a>
-              <motion.a whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} href="https://www.linkedin.com/in/anv-dev/" target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-emerald-400 transition-colors" onMouseEnter={playHover} onClick={playClick}><LinkedInIcon className="w-7 h-7" /></motion.a>
+              {socials.github && (
+                <motion.a whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} href={socials.github} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-emerald-400 transition-colors" onMouseEnter={playHover} onClick={playClick}><GitHubIcon className="w-7 h-7" /></motion.a>
+              )}
+              {socials.linkedin && (
+                <motion.a whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} href={socials.linkedin} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-emerald-400 transition-colors" onMouseEnter={playHover} onClick={playClick}><LinkedInIcon className="w-7 h-7" /></motion.a>
+              )}
+              {socials.twitter && (
+                <motion.a whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} href={socials.twitter} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-emerald-400 transition-colors" onMouseEnter={playHover} onClick={playClick}><TwitterIcon className="w-7 h-7" /></motion.a>
+              )}
               <motion.button whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }} onMouseEnter={playHover} onClick={() => { playClick(); handleScroll("contact"); }} className="text-zinc-500 hover:text-emerald-400 transition-colors"><Mail className="w-7 h-7" /></motion.button>
             </div>
           </FadeIn>
