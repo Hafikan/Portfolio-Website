@@ -5,7 +5,6 @@ import LoadingScreen from "../ui/LoadingScreen";
 import OnboardingTour from "../ui/OnboardingTour";
 import PresenceCursors from "../ui/PresenceCursors";
 import EasterEggTips from "../ui/EasterEggTips";
-import RadialMenu from "../radial-menu";
 import SmoothScroll from "./SmoothScroll";
 
 const LoadingContext = createContext({ isSiteReady: false });
@@ -34,7 +33,6 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
             <OnboardingTour />
             <PresenceCursors />
             <EasterEggTips />
-            <RadialMenu />
           </>
         )}
       </SmoothScroll>
