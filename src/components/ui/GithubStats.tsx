@@ -14,8 +14,8 @@ export default function GithubStats() {
   const [data, setData] = useState<GithubData | null>(null);
 
   useEffect(() => {
-    // Fetch stats for the user (assuming Stewy8506 based on repo)
-    fetch("https://api.github.com/users/Stewy8506")
+    // Fetch stats for the user (assuming Hafikan based on repo)
+    fetch("https://api.github.com/users/Hafikan")
       .then(res => res.json())
       .then(user => {
         setData({
@@ -49,7 +49,7 @@ export default function GithubStats() {
           <span className="text-xs text-zinc-500 uppercase tracking-wider">Followers</span>
         </div>
       </div>
-      <a href="https://github.com/Stewy8506" target="_blank" rel="noreferrer" className="mt-4 block w-full text-center py-2 text-sm text-emerald-400 hover:text-emerald-300 transition-colors bg-emerald-500/10 rounded-lg">
+      <a href="https://github.com/Hafikan" target="_blank" rel="noreferrer" className="mt-4 block w-full text-center py-2 text-sm text-emerald-400 hover:text-emerald-300 transition-colors bg-emerald-500/10 rounded-lg">
         View Profile →
       </a>
     </div>

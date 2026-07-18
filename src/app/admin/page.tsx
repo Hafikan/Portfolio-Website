@@ -2,13 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, LogOut, Save, ExternalLink, Upload, Image as ImageIcon, X, Search, Filter, Edit2, LayoutTemplate, Wrench, GripVertical, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
+import { Plus, Trash2, LogOut, Save, ExternalLink, Upload, Image as ImageIcon, X, Search, Filter, Edit2, LayoutTemplate, Wrench, GripVertical, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
 import AdminCategoryModal from "@/components/admin/AdminCategoryModal";
 import AdminSkillModal from "@/components/admin/AdminSkillModal";
 import AdminProjectModal from "@/components/admin/AdminProjectModal";
-import AdminGuestbookTab from "@/components/admin/AdminGuestbookTab";
-import { db } from "@/lib/firebase";
-import { collection, query, orderBy, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { toast } from "@/components/ui/Toast";
 import {
   DEFAULT_PROJECT_CATEGORY,
@@ -18,15 +15,15 @@ import {
   normalizeProjectCategory,
   normalizeSkillCategory,
 } from "@/lib/projects";
+import { SOCIAL_FIELDS, DEFAULT_SOCIALS, type Socials } from "@/lib/socials";
 
 type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
 type SkillCategory = (typeof SKILL_CATEGORIES)[number];
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<"projects" | "skills" | "guestbook">("projects");
+  const [activeTab, setActiveTab] = useState<"projects" | "skills">("projects");
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
-  const [guestbookEntries, setGuestbookEntries] = useState<any[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   
@@ -87,12 +84,13 @@ export default function AdminDashboard() {
   }, [projects, predefinedCategories]);
 
   const [employedStatus, setEmployedStatus] = useState<boolean | null>(null);
+  const [socials, setSocials] = useState<Socials>(DEFAULT_SOCIALS);
+  const [savingSocials, setSavingSocials] = useState(false);
 
   useEffect(() => {
     fetchProjects();
     fetchSkills();
     fetchConfig();
-    fetchGuestbook();
   }, []);
 
   const fetchConfig = async () => {
@@ -104,8 +102,31 @@ export default function AdminDashboard() {
         const parsed = data.categories.map((c: any) => typeof c === 'string' ? { name: c, imageType: "auto" } : c);
         setPredefinedCategories(parsed);
       }
+      if (data.socials) {
+        setSocials({ ...DEFAULT_SOCIALS, ...data.socials });
+      }
     } catch (error) {
       console.error("Failed to fetch config.");
+    }
+  };
+
+  const saveSocials = async () => {
+    setSavingSocials(true);
+    try {
+      const res = await fetch("/api/config", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ socials }),
+      });
+      if (res.ok) {
+        toast("Social links updated successfully.", "success");
+      } else {
+        toast("Failed to update social links.", "error");
+      }
+    } catch (error) {
+      toast("An error occurred while saving social links.", "error");
+    } finally {
+      setSavingSocials(false);
     }
   };
 
@@ -206,18 +227,6 @@ export default function AdminDashboard() {
       setSkills(data);
     } catch (error) {
       toast("Failed to fetch skills.", "error");
-    }
-  };
-
-  const fetchGuestbook = async () => {
-    if (!db) return;
-    try {
-      const q = query(collection(db, "guestbook"), orderBy("timestamp", "desc"));
-      const snapshot = await getDocs(q);
-      const entries = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setGuestbookEntries(entries);
-    } catch (error) {
-      toast("Failed to fetch guestbook.", "error");
     }
   };
 
@@ -389,22 +398,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDeleteGuestbookEntry = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this guestbook entry?")) return;
-    setLoading(true);
-    try {
-      if (db) {
-        await deleteDoc(doc(db, "guestbook", id));
-        toast("Guestbook entry deleted.", "success");
-        await fetchGuestbook();
-      }
-    } catch (error) {
-      toast("Failed to delete entry.", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleDragStart = (e: React.DragEvent, index: number) => {
     if (searchQuery || categoryFilter !== "All") {
       e.preventDefault();
@@ -530,14 +523,6 @@ export default function AdminDashboard() {
     });
   }, [skills, searchQuery, categoryFilter]);
 
-  const filteredGuestbook = useMemo(() => {
-    return guestbookEntries.filter((entry: any) => {
-      const matchesSearch = entry.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            entry.message.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesSearch;
-    });
-  }, [guestbookEntries, searchQuery]);
-
   if (loading && projects.length === 0 && skills.length === 0) return <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">Loading...</div>;
 
   return (
@@ -558,7 +543,7 @@ export default function AdminDashboard() {
             </button>
             <button 
               onClick={() => activeTab === 'projects' ? setIsProjectModalOpen(true) : activeTab === 'skills' ? setIsSkillModalOpen(true) : null}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-100 text-zinc-900 font-medium hover:bg-zinc-200 transition-colors text-sm ${activeTab === 'guestbook' ? 'hidden' : ''}`}
+              className="flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-100 text-zinc-900 font-medium hover:bg-zinc-200 transition-colors text-sm"
             >
               <Plus size={16} /> New {activeTab === 'projects' ? 'Project' : 'Skill'}
             </button>
@@ -604,6 +589,37 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Social Links */}
+        <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 space-y-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col">
+              <span className="text-sm font-medium text-zinc-200">Social Links</span>
+              <span className="text-xs text-zinc-400">Shown in the Hero and Contact sections. Leave a field blank to hide it.</span>
+            </div>
+            <button
+              onClick={saveSocials}
+              disabled={savingSocials}
+              className="flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-100 text-zinc-900 font-medium hover:bg-zinc-200 transition-colors text-sm disabled:opacity-50 shrink-0"
+            >
+              <Save size={16} /> {savingSocials ? "Saving..." : "Save"}
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {SOCIAL_FIELDS.map((f) => (
+              <div key={f.key} className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-zinc-400">{f.label}</label>
+                <input
+                  type="text"
+                  value={socials[f.key]}
+                  onChange={(e) => setSocials((prev) => ({ ...prev, [f.key]: e.target.value }))}
+                  placeholder={f.placeholder}
+                  className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 text-sm focus:border-zinc-600 focus:outline-none transition-colors"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Tabs */}
         <div className="flex gap-2 border-b border-zinc-800 pb-2">
           <button 
@@ -617,12 +633,6 @@ export default function AdminDashboard() {
             className={`flex items-center gap-2 px-4 py-2 rounded-t-md text-sm font-medium transition-colors ${activeTab === "skills" ? "bg-zinc-800 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
           >
             <Wrench size={16} /> Skills
-          </button>
-          <button 
-            onClick={() => { setActiveTab("guestbook"); setCategoryFilter("All"); setSearchQuery(""); }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-t-md text-sm font-medium transition-colors ${activeTab === "guestbook" ? "bg-zinc-800 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
-          >
-            <MessageSquare size={16} /> Guestbook
           </button>
         </div>
 
@@ -821,12 +831,7 @@ export default function AdminDashboard() {
                   )}
                 </tbody>
               </table>
-            ) : (
-              <AdminGuestbookTab 
-                filteredGuestbook={filteredGuestbook} 
-                handleDeleteGuestbookEntry={handleDeleteGuestbookEntry} 
-              />
-            )}
+            ) : null}
           </div>
         </div>
       </div>

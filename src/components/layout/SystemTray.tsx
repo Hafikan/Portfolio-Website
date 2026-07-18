@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Volume2, VolumeX, MessageSquare, Wifi, Search, Terminal, BatteryMedium } from "lucide-react";
+import { Volume2, VolumeX, Wifi, Search, Terminal, BatteryMedium } from "lucide-react";
 import { toast } from "../ui/Toast";
 import Magnetic from "../ui/Magnetic";
 import { useWindowStore } from "@/store/windowStore";
@@ -46,19 +46,6 @@ export default function SystemTray({
   };
   return (
     <>
-      {/* 💬 Global Chat Trigger */}
-      <Magnetic strength={0.4}>
-        <button
-          id="tour-chat"
-          onClick={() => openWindow("chat", "chat", "Global Chat")}
-          className="flex items-center justify-center p-1 rounded hover:bg-white/10 active:scale-95 transition-all text-white/90 cursor-pointer outline-none border-0 bg-transparent"
-          title="Open Global Chat"
-          aria-label="Open Global Chat Window"
-        >
-          <MessageSquare className="w-4 h-4 md:w-3.5 md:h-3.5 text-emerald-400" />
-        </button>
-      </Magnetic>
-
       {/* 📶 WiFi Diagnostic */}
       <Magnetic strength={0.4}>
         <button

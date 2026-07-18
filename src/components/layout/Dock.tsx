@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { User, Code2, FolderGit2, Mail, Terminal, MessageSquare } from "lucide-react";
+import { User, Code2, FolderGit2, Mail, Terminal } from "lucide-react";
 import { useSoundEffect } from "@/hooks/useSoundEffect";
 import { usePathname } from "next/navigation";
 import Magnetic from "@/components/ui/Magnetic";
@@ -73,18 +73,6 @@ export default function Dock() {
       appType: "terminal" as WindowType,
       title: "Terminal (bash)",
       color: "from-zinc-800 to-zinc-950 border border-white/5 shadow-inner"
-    });
-  }
-
-  if (windows["chat"]?.isOpen || windows["chat"]?.isClosing) {
-    activeApps.push({
-      name: "Chat Lobby",
-      icon: MessageSquare,
-      type: "app" as const,
-      id: "chat",
-      appType: "chat" as WindowType,
-      title: "Global Chat",
-      color: "from-emerald-500/80 to-emerald-700/80 border border-white/5 shadow-inner"
     });
   }
 

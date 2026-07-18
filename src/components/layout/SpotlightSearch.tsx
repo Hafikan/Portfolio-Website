@@ -2,18 +2,15 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, FileText, Settings, AppWindow, MessageSquare, CornerDownLeft, Lock } from "lucide-react";
+import { Search, FileText, Settings, AppWindow, CornerDownLeft, Lock } from "lucide-react";
 import { toast } from "../ui/Toast";
 import { scrollToSection } from "@/lib/navigation";
-import { useWindowStore } from "@/store/windowStore";
 
 const SPOTLIGHT_ITEMS = [
   { title: "About Anuvab", category: "Navigation", desc: "Background, timeline, and professional bio", icon: FileText, action: "about" },
   { title: "Technical Ecosystem", category: "Navigation", desc: "Skills, frameworks, and programming languages", icon: Settings, action: "skills" },
   { title: "Featured Projects", category: "Navigation", desc: "Check out web, mobile, and embedded creations", icon: AppWindow, action: "projects" },
-  { title: "Get in Touch", category: "Navigation", desc: "Contact details and message submission console", icon: FileText, action: "contact" },
-  { title: "Guestbook Wall", category: "Navigation", desc: "Sign the guest wall and read thoughts from visitors", icon: MessageSquare, action: "guestbook" },
-  { title: "Join Global Chat", category: "Lobby", desc: "Real-time anonymous discussions with other peers", icon: MessageSquare, action: "chat" },
+  { title: "Get in Touch", category: "Navigation", desc: "Contact details and social links", icon: FileText, action: "contact" },
   { title: "Download Resume", category: "Utility", desc: "Get Anuvab's latest PDF resume directly", icon: FileText, action: "resume" },
   { title: "Admin Portal", category: "System", desc: "Utility tools, analytics, and contact manager", icon: Settings, action: "admin" }
 ];
@@ -29,7 +26,6 @@ export default function SpotlightSearch({
   setIsSpotlightOpen,
   isAdmin,
 }: SpotlightSearchProps) {
-  const openWindow = useWindowStore((state) => state.openWindow);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchIndex, setSearchIndex] = useState(0);
   const spotlightInputRef = useRef<HTMLInputElement>(null);
@@ -60,11 +56,9 @@ export default function SpotlightSearch({
   const triggerSearchAction = (action: string) => {
     setIsSpotlightOpen(false);
 
-    if (["about", "skills", "projects", "contact", "guestbook"].includes(action)) {
+    if (["about", "skills", "projects", "contact"].includes(action)) {
       scrollToSection(action);
       toast(`Scrolled to ${action.toUpperCase()} section`, "success");
-    } else if (action === "chat") {
-      openWindow("chat", "chat", "Global Chat");
     } else if (action === "resume") {
       const link = document.createElement("a");
       link.href = "/resume.pdf";

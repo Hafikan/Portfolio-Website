@@ -1,3 +1,9 @@
 {
-  "employed": true
+  "employed": true,
+  "socials": {
+    "email": "hafikanyesilyurt@gmail.com",
+    "github": "https://github.com/Hafikan",
+    "linkedin": "",
+    "twitter": ""
+  }
 }

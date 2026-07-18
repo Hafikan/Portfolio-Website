@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronRight, ChevronLeft, Menu, Volume2, MessageSquare, Search } from "lucide-react";
+import { X, ChevronRight, ChevronLeft, Menu, Volume2, Search } from "lucide-react";
 
 const TOUR_STEPS = [
   {
@@ -17,12 +17,6 @@ const TOUR_STEPS = [
     description: "Click here to stream soothing lofi music while you explore.",
     descriptionDesktop: "Click to stream lofi music. Right-click the icon to reveal the volume slider!",
     icon: Volume2,
-  },
-  {
-    id: "#tour-chat",
-    title: "Global Chat",
-    description: "Join the real-time anonymous chat room! Interact with other live visitors here.",
-    icon: MessageSquare,
   },
   {
     id: "#tour-spotlight",

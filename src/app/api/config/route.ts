@@ -12,7 +12,7 @@ async function getLocalConfig() {
     const data = await fs.readFile(CONFIG_PATH, "utf8");
     return JSON.parse(data);
   } catch (error) {
-    return { employed: false, categories: [{name: "Mobile App", imageType: "phone"}, {name: "Embedded Systems", imageType: "embedded"}, {name: "AI Product", imageType: "desktop"}, {name: "Website", imageType: "desktop"}] }; 
+    return { employed: false, categories: [{name: "Mobile App", imageType: "phone"}, {name: "Embedded Systems", imageType: "embedded"}, {name: "AI Product", imageType: "desktop"}, {name: "Website", imageType: "desktop"}], socials: { email: "", github: "", linkedin: "", twitter: "" } };
   }
 }
 
@@ -42,11 +42,14 @@ export async function PUT(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { employed, categories } = body;
+    const { employed, categories, socials } = body;
 
-    const newConfig: any = {};
+    // Merge onto the existing config so updating one field doesn't wipe the others.
+    const current = await getLocalConfig();
+    const newConfig: any = { ...current };
     if (employed !== undefined) newConfig.employed = !!employed;
     if (categories !== undefined) newConfig.categories = categories;
+    if (socials !== undefined) newConfig.socials = { ...(current.socials || {}), ...socials };
 
     // Always write to local config first for robustness in local/dev setup
     try {

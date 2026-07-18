@@ -4,12 +4,12 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     // Fetch user details for repositories count and profile URL
-    const userRes = await fetch("https://api.github.com/users/Stewy8506", {
+    const userRes = await fetch("https://api.github.com/users/Hafikan", {
       next: { revalidate: 3600 }, // Cache for 1 hour
     });
     
     let public_repos = 0;
-    let html_url = "https://github.com/Stewy8506";
+    let html_url = "https://github.com/Hafikan";
     
     if (userRes.ok) {
       const userData = await userRes.json();
@@ -18,7 +18,7 @@ export async function GET() {
     }
 
     // Fetch total commits of all time using the Search API
-    const commitsRes = await fetch(`https://api.github.com/search/commits?q=author:Stewy8506`, {
+    const commitsRes = await fetch(`https://api.github.com/search/commits?q=author:Hafikan`, {
       headers: {
         Accept: 'application/vnd.github.cloak-preview',
       },

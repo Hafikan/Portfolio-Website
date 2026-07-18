@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { verifySessionToken } from "@/lib/auth";
 import { db, isFirebaseConfigured } from "@/lib/firebase";
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
+import { readProjectsFile, writeProjectsFile } from "@/lib/localData";
 
 export async function POST(req: NextRequest) {
   const token = req.cookies.get("admin_session")?.value;
@@ -9,8 +10,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Local JSON persistence when Firebase is not configured
   if (!isFirebaseConfigured || !db) {
-    return NextResponse.json({ error: "Firebase not configured on server" }, { status: 503 });
+    try {
+      const { oldName, newName, imageType } = await req.json();
+      if (!oldName || !newName) {
+        return NextResponse.json({ error: "oldName and newName are required" }, { status: 400 });
+      }
+      const list = await readProjectsFile();
+      let updatedCount = 0;
+      list.forEach((p: any) => {
+        if (p.category === oldName) {
+          p.category = newName;
+          if (imageType) p.imageType = imageType;
+          updatedCount += 1;
+        }
+      });
+      await writeProjectsFile(list);
+      return NextResponse.json({ success: true, updatedCount });
+    } catch (error) {
+      console.error("Local Category Rename Error:", error);
+      return NextResponse.json({ error: "Failed to rename category locally" }, { status: 500 });
+    }
   }
 
   try {

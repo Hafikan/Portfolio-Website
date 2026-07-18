@@ -23,8 +23,9 @@ export default function PresenceCursors() {
     const KEY = process.env.NEXT_PUBLIC_PUSHER_KEY;
     const CLUSTER = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
+    // Live visitor cursors require Pusher. Without keys, degrade silently
+    // (same as the radial reaction menu) instead of surfacing a dev-overlay error.
     if (!KEY || !CLUSTER) {
-      console.error("❌ PresenceCursors: Missing Pusher keys in .env.local");
       return;
     }
 

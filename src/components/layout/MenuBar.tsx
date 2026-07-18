@@ -98,7 +98,6 @@ export default function MenuBar() {
   const menuData: Record<string, MenuItem[]> = {
     anvos: [
       { label: "About anv os", action: () => { setActiveMenu(null); scrollToSection("about") } },
-      { label: "Sign Guestbook", action: () => { setActiveMenu(null); scrollToSection("guestbook") } },
       { divider: true, label: "" },
       { label: "System Preferences...", disabled: true },
       { label: "App Store...", disabled: true },
@@ -144,19 +143,7 @@ export default function MenuBar() {
           setActiveMenu(null);
         }
       },
-      { divider: true, label: "" },
-      { label: "View Source", shortcut: "⌥⌘U", action: () => { window.open("https://github.com/Stewy8506/portfolio-app", "_blank"); setActiveMenu(null); } },
     ],
-    Window: [
-      { label: "Minimize", shortcut: "⌘M", action: () => { toast("Window Minimized", "info"); setActiveMenu(null); } },
-      { label: "Zoom", action: () => { toast("Window Zoomed", "info"); setActiveMenu(null); } },
-      { divider: true, label: "" },
-      { label: "Bring All to Front", action: () => { toast("Brought to front", "info"); setActiveMenu(null); } },
-    ],
-    Help: [
-      { label: "anv os Help", action: () => { toast("You are looking at it!", "success"); setActiveMenu(null); } },
-      { label: "Contact Support", action: () => { scrollToSection("contact"); setActiveMenu(null); } }
-    ]
   };
 
   if (pathname === "/projects" || pathname.startsWith("/admin")) return null;
@@ -185,7 +172,7 @@ export default function MenuBar() {
           </div>
 
           <div className="hidden md:flex items-center gap-1 text-white/80">
-            {["File", "Edit", "View", "Window", "Help"].map((menu) => (
+            {["File", "Edit", "View"].map((menu) => (
               <div key={menu} className="relative">
                 <div
                   onClick={() => handleMenuClick(menu)}
