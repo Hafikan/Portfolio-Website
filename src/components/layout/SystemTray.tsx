@@ -19,7 +19,7 @@ export default function SystemTray({
   const handleWifiClick = () => {
     const isOnline = typeof navigator !== "undefined" ? navigator.onLine : true;
     if (isOnline) {
-      toast("Wi-Fi Connected: 'anv-os-secure' (Signal strength: Strong, 150 Mbps)", "success");
+      toast("Wi-Fi Connected: 'cerb-os-secure' (Signal strength: Strong, 150 Mbps)", "success");
     } else {
       toast("Wi-Fi Disconnected: No active adapters detected.", "error");
     }

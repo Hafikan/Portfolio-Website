@@ -72,7 +72,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
         >
           {/* Top subtle branding */}
           <div className="flex justify-between items-center text-[10px] text-zinc-600 tracking-widest uppercase">
-            <span>ANV_OS // V.1.0</span>
+            <span>CERB_OS // V.1.0</span>
             <span>SECURE BOOT</span>
           </div>
 

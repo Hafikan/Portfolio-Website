@@ -6,8 +6,8 @@ import { X, ChevronRight, ChevronLeft, Menu, Volume2, Search } from "lucide-reac
 
 const TOUR_STEPS = [
   {
-    id: "#tour-anvos",
-    title: "Welcome to anv os",
+    id: "#tour-cerbos",
+    title: "Welcome to cerb os",
     description: "This is the main system menu. You can use it to navigate around the portfolio and access settings.",
     icon: Menu,
   },

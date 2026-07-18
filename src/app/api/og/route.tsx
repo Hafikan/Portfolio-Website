@@ -77,7 +77,7 @@ export async function GET(request: Request) {
               marginTop: 'auto',
             }}
           >
-            <div style={{ color: '#10b981', fontSize: '24px', fontWeight: 'bold', marginRight: '16px' }}>anv-os</div>
+            <div style={{ color: '#10b981', fontSize: '24px', fontWeight: 'bold', marginRight: '16px' }}>cerb-os</div>
             <div style={{ color: '#71717a', fontSize: '24px' }}>v1.0.0</div>
           </div>
         </div>

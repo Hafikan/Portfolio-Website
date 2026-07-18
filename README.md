@@ -1,4 +1,4 @@
-# 🧠 Project: non_disclosure.exe (anv os)
+# 🧠 Project: non_disclosure.exe (cerb os)
 
 ```
               _  __             ___  ____  
@@ -26,9 +26,9 @@
 
 ---
 
-## 🖥️ What is anv os?
+## 🖥️ What is cerb os?
 
-`anv os` is a highly immersive, operating-system-inspired portfolio ecosystem masquerading as a modern portfolio. It blends the robust performance of low-level systems architectures with premium, high-fidelity front-end experiences, creating an environment that responds dynamically to your presence.
+`cerb os` is a highly immersive, operating-system-inspired portfolio ecosystem masquerading as a modern portfolio. It blends the robust performance of low-level systems architectures with premium, high-fidelity front-end experiences, creating an environment that responds dynamically to your presence.
 
 ### 🌟 Visual Highlights & Interactions
 
@@ -63,7 +63,7 @@
 
 ## 📁 Repository Blueprint & Core Subsystems
 
-`anv os` is structured as a zero-dependency-inspired workspace utilizing a highly componentized architecture. The source files are organized into atomic visual widgets, responsive layouts, data layers, and custom Hooks:
+`cerb os` is structured as a zero-dependency-inspired workspace utilizing a highly componentized architecture. The source files are organized into atomic visual widgets, responsive layouts, data layers, and custom Hooks:
 
 ```
 portfolio-app/

@@ -22,7 +22,7 @@ export default function TerminalWindow() {
       type: "output",
       content: (
         <div className="text-emerald-400 mb-2">
-          <p>anv-os v1.0.0 (tty1)</p>
+          <p>cerb-os v1.0.0 (tty1)</p>
           <p>Type &apos;help&apos; to see available commands.</p>
         </div>
       ),
@@ -159,7 +159,7 @@ export default function TerminalWindow() {
         <div className="crt relative flex-1 flex flex-col h-full">
           <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border-b border-zinc-800 select-none">
             <TerminalIcon className="w-4 h-4 text-zinc-400" />
-            <span className="text-xs font-semibold text-zinc-400 tracking-wider">guest@anv-os:~</span>
+            <span className="text-xs font-semibold text-zinc-400 tracking-wider">guest@cerb-os:~</span>
           </div>
 
           <div
@@ -172,7 +172,7 @@ export default function TerminalWindow() {
               <div key={entry.id} className="mb-1">
                 {entry.type === "input" ? (
                   <div className="flex items-start gap-2">
-                    <span className="text-emerald-500 font-bold">guest@anv-os:~$</span>
+                    <span className="text-emerald-500 font-bold">guest@cerb-os:~$</span>
                     <span className="text-emerald-100">{entry.content}</span>
                   </div>
                 ) : (
@@ -184,7 +184,7 @@ export default function TerminalWindow() {
             ))}
 
             <div className="flex items-center gap-2 mt-1 pb-4">
-              <span className="text-emerald-500 font-bold shrink-0">guest@anv-os:~$</span>
+              <span className="text-emerald-500 font-bold shrink-0">guest@cerb-os:~$</span>
               <input
                 ref={inputRef}
                 type="text"
