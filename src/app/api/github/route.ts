@@ -37,18 +37,16 @@ export async function GET() {
       }
     }
 
-    let totalContributions = 0;
+    let totalCommits = 0;
 
     if (token && createdYear) {
-      // Sum total contributions (commits, issues, PRs, reviews — private included)
-      // year by year via GraphQL. contributionsCollection is capped at a 1-year window.
+      // Sum commit contributions (private included) year by year via GraphQL.
+      // contributionsCollection is capped at a 1-year window, so we query per calendar year.
       const currentYear = new Date().getFullYear();
       const query = `query($from: DateTime!, $to: DateTime!) {
         viewer {
           contributionsCollection(from: $from, to: $to) {
-            contributionCalendar {
-              totalContributions
-            }
+            totalCommitContributions
           }
         }
       }`;
@@ -68,13 +66,13 @@ export async function GET() {
           });
           if (!res.ok) return 0;
           const json = await res.json();
-          return json?.data?.viewer?.contributionsCollection?.contributionCalendar?.totalContributions || 0;
+          return json?.data?.viewer?.contributionsCollection?.totalCommitContributions || 0;
         })
       );
 
-      totalContributions = perYear.reduce((sum, n) => sum + n, 0);
+      totalCommits = perYear.reduce((sum, n) => sum + n, 0);
     } else {
-      // No token: public commit count via the Search API (best-effort approximation).
+      // No token: public commit count via the Search API.
       const commitsRes = await fetch(`https://api.github.com/search/commits?q=author:${GITHUB_LOGIN}`, {
         headers: {
           Accept: "application/vnd.github.cloak-preview",
@@ -84,12 +82,12 @@ export async function GET() {
       });
       if (commitsRes.ok) {
         const searchData = await commitsRes.json();
-        totalContributions = searchData.total_count || 0;
+        totalCommits = searchData.total_count || 0;
       }
     }
 
     return NextResponse.json({
-      total_contributions: totalContributions,
+      total_commits: totalCommits,
       public_repos,
       html_url,
     });

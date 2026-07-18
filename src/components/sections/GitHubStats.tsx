@@ -11,7 +11,7 @@ const GithubIcon = ({ className }: { className?: string }) => (
 );
 
 export default function GitHubStats() {
-  const [data, setData] = useState<{ total_contributions: number; public_repos: number; html_url: string } | null>(null);
+  const [data, setData] = useState<{ total_commits: number; public_repos: number; html_url: string } | null>(null);
 
   useEffect(() => {
     fetch("/api/github")
@@ -92,8 +92,8 @@ export default function GitHubStats() {
             </motion.div>
             <div className="w-px h-8 bg-white/10" />
             <motion.div whileHover={{ y: -5 }} className="flex flex-col items-center">
-              <span className="text-2xl font-black text-white group-hover:text-emerald-400 transition-colors">{data.total_contributions}</span>
-              <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-500 mt-1 font-medium">Contributions</span>
+              <span className="text-2xl font-black text-white group-hover:text-emerald-400 transition-colors">{data.total_commits}</span>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-500 mt-1 font-medium">Commits</span>
             </motion.div>
           </div>
         </div>
