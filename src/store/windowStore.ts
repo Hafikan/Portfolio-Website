@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type WindowType = "terminal" | "chat" | "admin" | "project" | "browser";
+export type WindowType = "terminal" | "admin" | "project" | "browser";
 
 export interface AppWindowData {
   id: string;

@@ -10,7 +10,6 @@ import NoiseOverlay from "@/components/ui/NoiseOverlay";
 import ScrollToTop from "@/components/ui/ScrollToTop";
 import HashCanonicalizer from "@/components/layout/HashCanonicalizer";
 import TerminalWindow from "@/components/ui/TerminalWindow";
-import ChatWindow from "@/components/ui/ChatWindow";
 import KonamiCode from "@/components/ui/KonamiCode";
 
 const dmSans = DM_Sans({
@@ -60,7 +59,6 @@ export default function RootLayout({
           <DynamicBackground />
           <CustomCursor />
           <TerminalWindow />
-          <ChatWindow />
           <KonamiCode />
           <MenuBar />
           {children}

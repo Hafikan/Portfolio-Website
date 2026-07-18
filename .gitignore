@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# atomic-write temp files (src/lib/localData.ts)
+src/data/.*.json.tmp

@@ -3,8 +3,6 @@ import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
-import Guestbook from "@/components/sections/Guestbook";
-import Footer from "@/components/layout/Footer";
 import Script from "next/script";
 
 export default function Home() {
@@ -33,8 +31,6 @@ export default function Home() {
       <Skills />
       <Projects limit={3} />
       <Contact />
-      <Guestbook />
-      <Footer />
     </main>
   );
 }

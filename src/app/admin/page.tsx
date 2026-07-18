@@ -2,13 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, LogOut, Save, ExternalLink, Upload, Image as ImageIcon, X, Search, Filter, Edit2, LayoutTemplate, Wrench, GripVertical, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
+import { Plus, Trash2, LogOut, Save, ExternalLink, Upload, Image as ImageIcon, X, Search, Filter, Edit2, LayoutTemplate, Wrench, GripVertical, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
 import AdminCategoryModal from "@/components/admin/AdminCategoryModal";
 import AdminSkillModal from "@/components/admin/AdminSkillModal";
 import AdminProjectModal from "@/components/admin/AdminProjectModal";
-import AdminGuestbookTab from "@/components/admin/AdminGuestbookTab";
-import { db } from "@/lib/firebase";
-import { collection, query, orderBy, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { toast } from "@/components/ui/Toast";
 import {
   DEFAULT_PROJECT_CATEGORY,
@@ -23,10 +20,9 @@ type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
 type SkillCategory = (typeof SKILL_CATEGORIES)[number];
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<"projects" | "skills" | "guestbook">("projects");
+  const [activeTab, setActiveTab] = useState<"projects" | "skills">("projects");
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
-  const [guestbookEntries, setGuestbookEntries] = useState<any[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   
@@ -92,7 +88,6 @@ export default function AdminDashboard() {
     fetchProjects();
     fetchSkills();
     fetchConfig();
-    fetchGuestbook();
   }, []);
 
   const fetchConfig = async () => {
@@ -206,18 +201,6 @@ export default function AdminDashboard() {
       setSkills(data);
     } catch (error) {
       toast("Failed to fetch skills.", "error");
-    }
-  };
-
-  const fetchGuestbook = async () => {
-    if (!db) return;
-    try {
-      const q = query(collection(db, "guestbook"), orderBy("timestamp", "desc"));
-      const snapshot = await getDocs(q);
-      const entries = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setGuestbookEntries(entries);
-    } catch (error) {
-      toast("Failed to fetch guestbook.", "error");
     }
   };
 
@@ -389,22 +372,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDeleteGuestbookEntry = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this guestbook entry?")) return;
-    setLoading(true);
-    try {
-      if (db) {
-        await deleteDoc(doc(db, "guestbook", id));
-        toast("Guestbook entry deleted.", "success");
-        await fetchGuestbook();
-      }
-    } catch (error) {
-      toast("Failed to delete entry.", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleDragStart = (e: React.DragEvent, index: number) => {
     if (searchQuery || categoryFilter !== "All") {
       e.preventDefault();
@@ -530,14 +497,6 @@ export default function AdminDashboard() {
     });
   }, [skills, searchQuery, categoryFilter]);
 
-  const filteredGuestbook = useMemo(() => {
-    return guestbookEntries.filter((entry: any) => {
-      const matchesSearch = entry.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            entry.message.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesSearch;
-    });
-  }, [guestbookEntries, searchQuery]);
-
   if (loading && projects.length === 0 && skills.length === 0) return <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">Loading...</div>;
 
   return (
@@ -558,7 +517,7 @@ export default function AdminDashboard() {
             </button>
             <button 
               onClick={() => activeTab === 'projects' ? setIsProjectModalOpen(true) : activeTab === 'skills' ? setIsSkillModalOpen(true) : null}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-100 text-zinc-900 font-medium hover:bg-zinc-200 transition-colors text-sm ${activeTab === 'guestbook' ? 'hidden' : ''}`}
+              className="flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-100 text-zinc-900 font-medium hover:bg-zinc-200 transition-colors text-sm"
             >
               <Plus size={16} /> New {activeTab === 'projects' ? 'Project' : 'Skill'}
             </button>
@@ -617,12 +576,6 @@ export default function AdminDashboard() {
             className={`flex items-center gap-2 px-4 py-2 rounded-t-md text-sm font-medium transition-colors ${activeTab === "skills" ? "bg-zinc-800 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
           >
             <Wrench size={16} /> Skills
-          </button>
-          <button 
-            onClick={() => { setActiveTab("guestbook"); setCategoryFilter("All"); setSearchQuery(""); }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-t-md text-sm font-medium transition-colors ${activeTab === "guestbook" ? "bg-zinc-800 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
-          >
-            <MessageSquare size={16} /> Guestbook
           </button>
         </div>
 
@@ -821,12 +774,7 @@ export default function AdminDashboard() {
                   )}
                 </tbody>
               </table>
-            ) : (
-              <AdminGuestbookTab 
-                filteredGuestbook={filteredGuestbook} 
-                handleDeleteGuestbookEntry={handleDeleteGuestbookEntry} 
-              />
-            )}
+            ) : null}
           </div>
         </div>
       </div>

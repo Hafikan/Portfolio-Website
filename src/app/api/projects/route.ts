@@ -3,24 +3,12 @@ import { NextResponse, NextRequest } from "next/server";
 import { verifySessionToken } from "@/lib/auth";
 import { db, isFirebaseConfigured } from "@/lib/firebase";
 import { collection, getDocs, addDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
-import fs from "fs/promises";
-import path from "path";
 import { normalizeProjectCategory } from "@/lib/projects";
-
-const LOCAL_DATA_PATH = path.join(process.cwd(), "src/data/projects.json");
+import { readProjectsFile, writeProjectsFile, resolveProjectId, uniqueId } from "@/lib/localData";
 
 // Helper to load static fallback projects if Firestore is unconfigured or empty
 async function getLocalProjects() {
-  try {
-    const data = await fs.readFile(LOCAL_DATA_PATH, "utf8");
-    const parsed = JSON.parse(data);
-    return parsed.map((p: any, idx: number) => ({
-      id: p.id || p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") || `project-${idx}`,
-      ...p
-    }));
-  } catch (error) {
-    return [];
-  }
+  return readProjectsFile();
 }
 
 export async function GET() {
@@ -65,13 +53,52 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Local JSON persistence when Firebase is not configured
   if (!isFirebaseConfigured || !db) {
-    return NextResponse.json({ error: "Firebase not configured on server" }, { status: 503 });
+    try {
+      const body = await req.json();
+      const list = await readProjectsFile();
+      const existingIds = new Set(list.map((p: any) => p.id));
+      const baseId = resolveProjectId(body, list.length);
+      const id = uniqueId(baseId, existingIds);
+
+      const newProject = {
+        id,
+        title: body.title || "",
+        description: body.description || "",
+        overview: body.overview || "",
+        problem: body.problem || "",
+        solution: body.solution || "",
+        approach: body.approach || "",
+        learnings: body.learnings || "",
+        liveDemoUrl: body.liveDemoUrl || "",
+        sourceCodeUrl: body.sourceCodeUrl || "",
+        tech: body.tech || [],
+        link: body.link || "",
+        category: normalizeProjectCategory(body.category),
+        imageType: body.imageType || "auto",
+        images: body.images || (body.image ? [body.image] : ["/projects/default.jpg"]),
+        isCurrentlyWorkingOn: body.isCurrentlyWorkingOn || false,
+        architectureDiagram: body.architectureDiagram || "",
+        databaseSchema: body.databaseSchema || "",
+        stateManagement: body.stateManagement || "",
+        challenges: body.challenges || [],
+        order: body.order !== undefined ? body.order : list.length,
+        createdAt: new Date().toISOString(),
+      };
+
+      list.push(newProject);
+      await writeProjectsFile(list);
+      return NextResponse.json(newProject);
+    } catch (error) {
+      console.error("Local Project POST Error:", error);
+      return NextResponse.json({ error: "Failed to save project locally" }, { status: 500 });
+    }
   }
 
   try {
     const body = await req.json();
-    
+
     // Save to Firestore 'projects' collection
     const docRef = await addDoc(collection(db, "projects"), {
       title: body.title || "",
@@ -115,8 +142,25 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Local JSON persistence when Firebase is not configured
   if (!isFirebaseConfigured || !db) {
-    return NextResponse.json({ error: "Firebase not configured on server" }, { status: 503 });
+    try {
+      const { searchParams } = new URL(req.url);
+      const id = searchParams.get("id");
+      if (!id) {
+        return NextResponse.json({ error: "ID is required" }, { status: 400 });
+      }
+      const list = await readProjectsFile();
+      const filtered = list.filter((p: any) => p.id !== id);
+      if (filtered.length === list.length) {
+        return NextResponse.json({ error: "Project not found" }, { status: 404 });
+      }
+      await writeProjectsFile(filtered);
+      return NextResponse.json({ success: true });
+    } catch (error) {
+      console.error("Local Project DELETE Error:", error);
+      return NextResponse.json({ error: "Failed to delete project locally" }, { status: 500 });
+    }
   }
 
   try {

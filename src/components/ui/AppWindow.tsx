@@ -54,7 +54,7 @@ export default function AppWindow({
   const targetY = viewport.height / 2 - (isMobile ? 50 : 60);
 
   // Align precisely with the Dock app positions (in pixels relative to center)
-  const targetX = id === "terminal" ? 60 : id === "chat" ? 120 : 0;
+  const targetX = id === "terminal" ? 60 : 0;
 
   useEffect(() => {
     let isMounted = true;

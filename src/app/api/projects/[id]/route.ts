@@ -3,6 +3,7 @@ import { verifySessionToken } from "@/lib/auth";
 import { db, isFirebaseConfigured } from "@/lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { normalizeProjectCategory } from "@/lib/projects";
+import { readProjectsFile, writeProjectsFile, withLock } from "@/lib/localData";
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const token = req.cookies.get("admin_session")?.value;
@@ -10,8 +11,39 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Local JSON persistence when Firebase is not configured.
+  // Serialized via withLock so the admin drag-reorder (one PUT per project,
+  // fired concurrently) doesn't clobber writes to the shared JSON file.
   if (!isFirebaseConfigured || !db) {
-    return NextResponse.json({ error: "Firebase not configured on server" }, { status: 503 });
+    const { id } = await params;
+    const body = await req.json();
+    return withLock(async () => {
+      try {
+        const list = await readProjectsFile();
+        const index = list.findIndex((p: any) => p.id === id);
+
+        const merged = {
+          ...(index >= 0 ? list[index] : {}),
+          ...body,
+          id,
+          category: normalizeProjectCategory(body.category),
+          imageType: body.imageType || "auto",
+          images: body.images || (body.image ? [body.image] : ["/projects/default.jpg"]),
+          updatedAt: new Date().toISOString(),
+        };
+
+        if (index >= 0) {
+          list[index] = merged;
+        } else {
+          list.push(merged);
+        }
+        await writeProjectsFile(list);
+        return NextResponse.json(merged);
+      } catch (error) {
+        console.error("Local Project PUT Error:", error);
+        return NextResponse.json({ error: "Failed to update project locally" }, { status: 500 });
+      }
+    });
   }
 
   try {
