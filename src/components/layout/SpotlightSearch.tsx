@@ -7,11 +7,10 @@ import { toast } from "../ui/Toast";
 import { scrollToSection } from "@/lib/navigation";
 
 const SPOTLIGHT_ITEMS = [
-  { title: "About Anuvab", category: "Navigation", desc: "Background, timeline, and professional bio", icon: FileText, action: "about" },
+  { title: "About Hafıkan", category: "Navigation", desc: "Background, timeline, and professional bio", icon: FileText, action: "about" },
   { title: "Technical Ecosystem", category: "Navigation", desc: "Skills, frameworks, and programming languages", icon: Settings, action: "skills" },
   { title: "Featured Projects", category: "Navigation", desc: "Check out web, mobile, and embedded creations", icon: AppWindow, action: "projects" },
   { title: "Get in Touch", category: "Navigation", desc: "Contact details and social links", icon: FileText, action: "contact" },
-  { title: "Download Resume", category: "Utility", desc: "Get Anuvab's latest PDF resume directly", icon: FileText, action: "resume" },
   { title: "Admin Portal", category: "System", desc: "Utility tools, analytics, and contact manager", icon: Settings, action: "admin" }
 ];
 
@@ -59,12 +58,6 @@ export default function SpotlightSearch({
     if (["about", "skills", "projects", "contact"].includes(action)) {
       scrollToSection(action);
       toast(`Scrolled to ${action.toUpperCase()} section`, "success");
-    } else if (action === "resume") {
-      const link = document.createElement("a");
-      link.href = "/resume.pdf";
-      link.download = "Anuvab_Das_Resume.pdf";
-      link.click();
-      toast("Downloading resume...", "success");
     } else if (action === "admin") {
       if (!isAdmin) {
         toast("Admin Portal requires authentication. Please log in first.", "error");

@@ -96,8 +96,8 @@ export default function MenuBar() {
   };
 
   const menuData: Record<string, MenuItem[]> = {
-    anvos: [
-      { label: "About anv os", action: () => { setActiveMenu(null); scrollToSection("about") } },
+    cerbos: [
+      { label: "About cerb os", action: () => { setActiveMenu(null); scrollToSection("about") } },
       { divider: true, label: "" },
       { label: "System Preferences...", disabled: true },
       { label: "App Store...", disabled: true },
@@ -107,17 +107,6 @@ export default function MenuBar() {
     ],
     File: [
       { label: "New Window", shortcut: "⌘N", action: () => { window.open(window.location.href, "_blank"); setActiveMenu(null); } },
-      { divider: true, label: "" },
-      {
-        label: "Download Resume", shortcut: "⌘D", action: () => {
-          const link = document.createElement("a");
-          link.href = "/resume.pdf";
-          link.download = "Anuvab_Das_Resume.pdf";
-          link.click();
-          toast("Downloading resume...", "success");
-          setActiveMenu(null);
-        }
-      },
       { divider: true, label: "" },
       { label: "Print...", shortcut: "⌘P", action: () => { window.print(); setActiveMenu(null); } },
       { label: "Close Window", shortcut: "⌘W", action: () => { toast("Cannot close main window.", "info"); setActiveMenu(null); } },
@@ -159,16 +148,16 @@ export default function MenuBar() {
       >
         {/* Desktop Left side */}
         <div className="hidden md:flex items-center gap-5">
-          <div className="relative" id="tour-anvos">
+          <div className="relative" id="tour-cerbos">
             <div
-              onClick={() => handleMenuClick("anvos")}
-              onMouseEnter={() => handleMenuHover("anvos")}
-              className={`flex items-center gap-2 px-2 py-0.5 rounded cursor-pointer transition-colors ${activeMenu === "anvos" ? "bg-white/20" : "hover:bg-white/10"}`}
+              onClick={() => handleMenuClick("cerbos")}
+              onMouseEnter={() => handleMenuHover("cerbos")}
+              className={`flex items-center gap-2 px-2 py-0.5 rounded cursor-pointer transition-colors ${activeMenu === "cerbos" ? "bg-white/20" : "hover:bg-white/10"}`}
             >
               <Command className="w-3.5 h-3.5" />
-              <span className="font-bold tracking-tight">anv os</span>
+              <span className="font-bold tracking-tight">cerb os</span>
             </div>
-            <MenuDropdown isOpen={activeMenu === "anvos"} items={menuData["anvos"]} />
+            <MenuDropdown isOpen={activeMenu === "cerbos"} items={menuData["cerbos"]} />
           </div>
 
           <div className="hidden md:flex items-center gap-1 text-white/80">

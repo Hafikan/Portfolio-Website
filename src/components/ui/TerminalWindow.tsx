@@ -22,7 +22,7 @@ export default function TerminalWindow() {
       type: "output",
       content: (
         <div className="text-emerald-400 mb-2">
-          <p>anv-os v1.0.0 (tty1)</p>
+          <p>cerb-os v1.0.0 (tty1)</p>
           <p>Type &apos;help&apos; to see available commands.</p>
         </div>
       ),
@@ -70,7 +70,6 @@ export default function TerminalWindow() {
           <ul className="grid grid-cols-2 gap-x-4 gap-y-1 my-2">
             <li><span className="text-emerald-300">about</span> - Who am I?</li>
             <li><span className="text-emerald-300">projects</span> - View my work</li>
-            <li><span className="text-emerald-300">resume</span> - Download PDF</li>
             <li><span className="text-emerald-300">contact</span> - Get in touch</li>
             <li><span className="text-emerald-300">clear</span> - Clear terminal</li>
             <li><span className="text-emerald-300">exit</span> - Close terminal</li>
@@ -94,14 +93,6 @@ export default function TerminalWindow() {
         output = "Navigating to Contact section...";
         scrollToSection("contact");
         setTimeout(() => closeWindow("terminal"), 800);
-        break;
-      case "resume":
-      case "cat resume.pdf":
-        output = "Downloading resume...";
-        const link = document.createElement("a");
-        link.href = "/resume.pdf";
-        link.download = "Anuvab_Resume.pdf";
-        link.click();
         break;
       case "clear":
         setHistory([]);
@@ -168,7 +159,7 @@ export default function TerminalWindow() {
         <div className="crt relative flex-1 flex flex-col h-full">
           <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border-b border-zinc-800 select-none">
             <TerminalIcon className="w-4 h-4 text-zinc-400" />
-            <span className="text-xs font-semibold text-zinc-400 tracking-wider">guest@anv-os:~</span>
+            <span className="text-xs font-semibold text-zinc-400 tracking-wider">guest@cerb-os:~</span>
           </div>
 
           <div
@@ -181,7 +172,7 @@ export default function TerminalWindow() {
               <div key={entry.id} className="mb-1">
                 {entry.type === "input" ? (
                   <div className="flex items-start gap-2">
-                    <span className="text-emerald-500 font-bold">guest@anv-os:~$</span>
+                    <span className="text-emerald-500 font-bold">guest@cerb-os:~$</span>
                     <span className="text-emerald-100">{entry.content}</span>
                   </div>
                 ) : (
@@ -193,7 +184,7 @@ export default function TerminalWindow() {
             ))}
 
             <div className="flex items-center gap-2 mt-1 pb-4">
-              <span className="text-emerald-500 font-bold shrink-0">guest@anv-os:~$</span>
+              <span className="text-emerald-500 font-bold shrink-0">guest@cerb-os:~$</span>
               <input
                 ref={inputRef}
                 type="text"

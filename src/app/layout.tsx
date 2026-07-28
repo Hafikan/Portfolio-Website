@@ -34,7 +34,7 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
-  title: "Anuvab Das | Full Stack Developer",
+  title: "Hafıkan Yeşilyurt | Full Stack Developer",
   description: "Premium portfolio of a full stack developer specializing in React Native, Flutter, and Next.js",
 };
 

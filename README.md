@@ -1,4 +1,4 @@
-# 🧠 Project: non_disclosure.exe (anv os)
+# 🧠 Project: non_disclosure.exe (cerb os)
 
 ```
               _  __             ___  ____  
@@ -12,7 +12,7 @@
 > **Warning: This repository is a sentient environment.** If you are reading this, you have already initialized the session. You are now part of the ecosystem.
 
 > [!IMPORTANT]
-> **Proprietary & Private Source Notice:** This repository is the personal portfolio of Anuvab Das. All rights reserved. The source code, assets, UI designs, and system concepts are strictly proprietary. Copying, distributing, cloning, modifying, or redeploying this application (either in part or in whole) for public, commercial, or personal use is strictly prohibited.
+> **Proprietary & Private Source Notice:** This repository is the personal portfolio of Hafıkan Yeşilyurt. All rights reserved. The source code, assets, UI designs, and system concepts are strictly proprietary. Copying, distributing, cloning, modifying, or redeploying this application (either in part or in whole) for public, commercial, or personal use is strictly prohibited.
 
 ---
 
@@ -26,9 +26,9 @@
 
 ---
 
-## 🖥️ What is anv os?
+## 🖥️ What is cerb os?
 
-`anv os` is a highly immersive, operating-system-inspired portfolio ecosystem masquerading as a modern portfolio. It blends the robust performance of low-level systems architectures with premium, high-fidelity front-end experiences, creating an environment that responds dynamically to your presence.
+`cerb os` is a highly immersive, operating-system-inspired portfolio ecosystem masquerading as a modern portfolio. It blends the robust performance of low-level systems architectures with premium, high-fidelity front-end experiences, creating an environment that responds dynamically to your presence.
 
 ### 🌟 Visual Highlights & Interactions
 
@@ -63,7 +63,7 @@
 
 ## 📁 Repository Blueprint & Core Subsystems
 
-`anv os` is structured as a zero-dependency-inspired workspace utilizing a highly componentized architecture. The source files are organized into atomic visual widgets, responsive layouts, data layers, and custom Hooks:
+`cerb os` is structured as a zero-dependency-inspired workspace utilizing a highly componentized architecture. The source files are organized into atomic visual widgets, responsive layouts, data layers, and custom Hooks:
 
 ```
 portfolio-app/
@@ -148,5 +148,5 @@ If you like the design, feel free to use it as inspiration to build your own uni
 
 ## 🧍‍♂️ Kernel Maintainer
 
-*   **Developer:** Anuvab Das (Stewy8506)
+*   **Developer:** Hafıkan Yeşilyurt (Hafikan)
 *   **Status:** Currently debugging a ghost loop that was fixed three builds ago.
