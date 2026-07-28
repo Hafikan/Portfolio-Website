@@ -51,7 +51,6 @@ export default function AdminProjectModal({
                 value={newProject.title || ""}
                 onChange={(e) => setNewProject({...newProject, title: e.target.value})}
                 className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors"
-                required
               />
             </div>
             <div>
@@ -60,7 +59,6 @@ export default function AdminProjectModal({
                 value={newProject.description || ""}
                 onChange={(e) => setNewProject({...newProject, description: e.target.value})}
                 className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 resize-none"
-                required
               />
             </div>
             <div>
@@ -111,7 +109,6 @@ export default function AdminProjectModal({
                 onChange={(e) => setNewProject({...newProject, tech: e.target.value})}
                 className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors"
                 placeholder="React, Next.js, Tailwind"
-                required
               />
             </div>
             <div>
@@ -121,7 +118,6 @@ export default function AdminProjectModal({
                 value={newProject.link || ""}
                 onChange={(e) => setNewProject({...newProject, link: e.target.value})}
                 className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors"
-                required
               />
             </div>
             <div>
