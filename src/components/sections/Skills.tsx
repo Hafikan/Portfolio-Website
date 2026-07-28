@@ -94,8 +94,8 @@ export default function Skills() {
           Technical <span className="text-zinc-500">Ecosystem</span>
         </h2>
         <p className="text-muted text-lg max-w-2xl mx-auto text-balance">
-          A dynamic, full-stack arsenal built for architecting high-performance applications, 
-          from low-level systems to cutting-edge AI and mobile experiences.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris,
+          nisi ut aliquip ex ea commodo consequat duis aute irure.
         </p>
       </FadeIn>
 
