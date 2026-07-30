@@ -33,7 +33,7 @@ export const PROJECT_CATEGORIES = [
 
 export const SKILL_CATEGORIES = [
   "Embedded Systems",
-  "Unmanned Aerial Vehicles",
+  "Distributed Systems",
 ] as const;
 
 export const DEFAULT_PROJECT_CATEGORY = PROJECT_CATEGORIES[0];
@@ -44,7 +44,7 @@ export function normalizeProjectCategory(category?: string) {
 }
 
 export function normalizeSkillCategory(category?: string) {
-  return SKILL_CATEGORIES.find((option) => option === category) || DEFAULT_SKILL_CATEGORY;
+  return category?.trim() || DEFAULT_SKILL_CATEGORY;
 }
 
 export function isWebsiteProject(project: Pick<Project, "category">) {

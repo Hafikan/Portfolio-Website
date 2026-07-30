@@ -1,5 +1,15 @@
 {
   "employed": true,
+  "skillCategories": [
+    {
+      "name": "Embedded Systems",
+      "icon": ""
+    },
+    {
+      "name": "Distributed Systems",
+      "icon": ""
+    }
+  ],
   "socials": {
     "email": "hafikanyesilyurt@gmail.com",
     "github": "https://github.com/Hafikan",

@@ -1,6 +1,5 @@
 import React from "react";
 import { X, Save } from "lucide-react";
-import { SKILL_CATEGORIES, normalizeSkillCategory } from "@/lib/projects";
 
 interface AdminSkillModalProps {
   isOpen: boolean;
@@ -10,6 +9,7 @@ interface AdminSkillModalProps {
   setNewSkill: (skill: any) => void;
   handleSaveSkill: (e: React.FormEvent) => void;
   loading: boolean;
+  dynamicSkillCategories: string[];
 }
 
 export default function AdminSkillModal({
@@ -19,7 +19,8 @@ export default function AdminSkillModal({
   newSkill,
   setNewSkill,
   handleSaveSkill,
-  loading
+  loading,
+  dynamicSkillCategories
 }: AdminSkillModalProps) {
   if (!isOpen) return null;
 
@@ -60,15 +61,18 @@ export default function AdminSkillModal({
             </div>
             <div>
               <label className="block text-zinc-400 mb-1">Category</label>
-              <select 
+              <input
+                type="text"
+                list="skill-categories"
                 value={newSkill.category}
-                onChange={(e) => setNewSkill({...newSkill, category: normalizeSkillCategory(e.target.value)})}
-                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors appearance-none"
-              >
-                {SKILL_CATEGORIES.map((category) => (
-                  <option key={category} value={category}>{category}</option>
+                onChange={(e) => setNewSkill({...newSkill, category: e.target.value})}
+                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors"
+              />
+              <datalist id="skill-categories">
+                {dynamicSkillCategories.map((category) => (
+                  <option key={category} value={category} />
                 ))}
-              </select>
+              </datalist>
             </div>
             <div className="flex items-center gap-2 pt-2">
               <input 
