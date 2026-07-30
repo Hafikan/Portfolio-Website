@@ -32,13 +32,8 @@ export const PROJECT_CATEGORIES = [
 ] as const;
 
 export const SKILL_CATEGORIES = [
-  "Web Dev",
-  "App Dev",
-  "Backend",
-  "Cloud/DevOps",
-  "AI/ML",
   "Embedded Systems",
-  "IoT",
+  "Unmanned Aerial Vehicles",
 ] as const;
 
 export const DEFAULT_PROJECT_CATEGORY = PROJECT_CATEGORIES[0];
