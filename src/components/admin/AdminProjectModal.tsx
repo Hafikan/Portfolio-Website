@@ -42,7 +42,7 @@ export default function AdminProjectModal({
           </button>
         </div>
         
-        <div className="p-6 overflow-y-auto">
+        <div className="p-6 overflow-y-auto flex-1 min-h-0">
           <form id="project-form" onSubmit={handleSaveProject} className="space-y-4 text-sm">
             <div>
               <label className="block text-zinc-400 mb-1">Title</label>
