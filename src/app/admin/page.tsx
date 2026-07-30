@@ -467,29 +467,21 @@ export default function AdminDashboard() {
 
     setUploading(true);
     try {
-      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-      const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
-
-      if (!cloudName || !uploadPreset || cloudName === "your_cloud_name" || uploadPreset === "your_unsigned_upload_preset") {
-        throw new Error("Missing Cloudinary configuration in .env.local.");
-      }
-
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("upload_preset", uploadPreset);
 
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+      const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Failed to upload image to Cloudinary.");
-
       const data = await res.json();
-      setNewProject({ ...newProject, images: [...newProject.images, data.secure_url] });
-      toast("Image uploaded to Cloudinary successfully!", "success");
+      if (!res.ok) throw new Error(data.error || "Failed to upload image.");
+
+      setNewProject({ ...newProject, images: [...newProject.images, data.url] });
+      toast("Image uploaded successfully!", "success");
     } catch (error: any) {
-      console.error("Cloudinary Upload Error:", error);
+      console.error("Image Upload Error:", error);
       toast(error.message || "Failed to upload image.", "error");
     } finally {
       setUploading(false);
