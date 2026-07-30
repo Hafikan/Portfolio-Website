@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, LogOut, Save, ExternalLink, Upload, Image as ImageIcon, X, Search, Filter, Edit2, LayoutTemplate, Wrench, GripVertical, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
 import AdminCategoryModal from "@/components/admin/AdminCategoryModal";
+import AdminSkillCategoryModal from "@/components/admin/AdminSkillCategoryModal";
 import AdminSkillModal from "@/components/admin/AdminSkillModal";
 import AdminProjectModal from "@/components/admin/AdminProjectModal";
 import { toast } from "@/components/ui/Toast";
@@ -11,14 +12,12 @@ import {
   DEFAULT_PROJECT_CATEGORY,
   DEFAULT_SKILL_CATEGORY,
   PROJECT_CATEGORIES,
-  SKILL_CATEGORIES,
   normalizeProjectCategory,
   normalizeSkillCategory,
 } from "@/lib/projects";
 import { SOCIAL_FIELDS, DEFAULT_SOCIALS, type Socials } from "@/lib/socials";
 
 type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
-type SkillCategory = (typeof SKILL_CATEGORIES)[number];
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"projects" | "skills">("projects");
@@ -59,7 +58,7 @@ export default function AdminDashboard() {
   const [newSkill, setNewSkill] = useState({
     name: "",
     slug: "",
-    category: DEFAULT_SKILL_CATEGORY as SkillCategory,
+    category: DEFAULT_SKILL_CATEGORY as string,
     white: false
   });
 
@@ -75,6 +74,10 @@ export default function AdminDashboard() {
   const [predefinedCategories, setPredefinedCategories] = useState<PredefinedCategory[]>([]);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
+  type PredefinedSkillCategory = { name: string, icon: string };
+  const [predefinedSkillCategories, setPredefinedSkillCategories] = useState<PredefinedSkillCategory[]>([]);
+  const [isSkillCategoryModalOpen, setIsSkillCategoryModalOpen] = useState(false);
+
   const dynamicProjectCategories = useMemo(() => {
     const categories = new Set<string>(predefinedCategories.map(c => c.name));
     projects.forEach((p: any) => {
@@ -82,6 +85,14 @@ export default function AdminDashboard() {
     });
     return Array.from(categories);
   }, [projects, predefinedCategories]);
+
+  const dynamicSkillCategories = useMemo(() => {
+    const categories = new Set<string>(predefinedSkillCategories.map(c => c.name));
+    skills.forEach((s: any) => {
+      if (s.category) categories.add(s.category);
+    });
+    return Array.from(categories);
+  }, [skills, predefinedSkillCategories]);
 
   const [employedStatus, setEmployedStatus] = useState<boolean | null>(null);
   const [socials, setSocials] = useState<Socials>(DEFAULT_SOCIALS);
@@ -101,6 +112,10 @@ export default function AdminDashboard() {
       if (data.categories) {
         const parsed = data.categories.map((c: any) => typeof c === 'string' ? { name: c, imageType: "auto" } : c);
         setPredefinedCategories(parsed);
+      }
+      if (data.skillCategories) {
+        const parsedSkillCategories = data.skillCategories.map((c: any) => typeof c === 'string' ? { name: c, icon: "" } : c);
+        setPredefinedSkillCategories(parsedSkillCategories);
       }
       if (data.socials) {
         setSocials({ ...DEFAULT_SOCIALS, ...data.socials });
@@ -185,6 +200,60 @@ export default function AdminDashboard() {
     }
     const updatedCategories = [...predefinedCategories, { name: newCategoryName.trim(), imageType: newCategoryFrame }];
     await saveCategoriesConfig(updatedCategories);
+    toast("Category added", "success");
+  };
+
+  const saveSkillCategoriesConfig = async (newCategories: PredefinedSkillCategory[]) => {
+    try {
+      await fetch("/api/config", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ skillCategories: newCategories }),
+      });
+      setPredefinedSkillCategories(newCategories);
+    } catch (error) {
+      toast("Failed to update skill categories config.", "error");
+    }
+  };
+
+  const handleRenameSkillCategory = async (oldName: string, newName: string, newIcon: string) => {
+    if (!newName.trim()) return;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/skills/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ oldName, newName: newName.trim() })
+      });
+      if (!res.ok) throw new Error();
+
+      const updatedCategories = predefinedSkillCategories.map(c => c.name === oldName ? { name: newName.trim(), icon: newIcon } : c);
+      await saveSkillCategoriesConfig(updatedCategories);
+
+      toast(`Category updated successfully`, "success");
+      await fetchSkills();
+    } catch (error) {
+      toast("Failed to update category", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteSkillCategory = async (name: string) => {
+    if (!confirm(`Are you sure you want to remove '${name}' from predefined categories? (Skills will keep this category until edited)`)) return;
+    const updatedCategories = predefinedSkillCategories.filter(c => c.name !== name);
+    await saveSkillCategoriesConfig(updatedCategories);
+    toast("Category removed from suggestions", "success");
+  };
+
+  const handleAddSkillCategory = async (newCategoryName: string, newCategoryIcon: string) => {
+    if (!newCategoryName.trim()) return;
+    if (predefinedSkillCategories.some(c => c.name === newCategoryName.trim())) {
+      toast("Category already exists", "error");
+      return;
+    }
+    const updatedCategories = [...predefinedSkillCategories, { name: newCategoryName.trim(), icon: newCategoryIcon.trim() }];
+    await saveSkillCategoriesConfig(updatedCategories);
     toast("Category added", "success");
   };
 
@@ -359,7 +428,7 @@ export default function AdminDashboard() {
   const closeSkillModal = () => {
     setIsSkillModalOpen(false);
     setEditingSkillId(null);
-    setNewSkill({ name: "", slug: "", category: DEFAULT_SKILL_CATEGORY as SkillCategory, white: false });
+    setNewSkill({ name: "", slug: "", category: DEFAULT_SKILL_CATEGORY as string, white: false });
   };
 
   const handleDeleteProject = async (id: string) => {
@@ -535,9 +604,9 @@ export default function AdminDashboard() {
             <p className="text-sm text-zinc-400">Manage your portfolio projects and configurations.</p>
           </div>
           <div className="flex gap-3">
-            <button 
-              onClick={() => setIsCategoryModalOpen(true)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-300 font-medium hover:bg-zinc-700 hover:text-white transition-colors text-sm ${activeTab === 'projects' ? '' : 'hidden'}`}
+            <button
+              onClick={() => activeTab === 'projects' ? setIsCategoryModalOpen(true) : setIsSkillCategoryModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-300 font-medium hover:bg-zinc-700 hover:text-white transition-colors text-sm"
             >
               <LayoutTemplate size={16} /> Manage Categories
             </button>
@@ -664,7 +733,7 @@ export default function AdminDashboard() {
                 </>
               ) : activeTab === "skills" ? (
                 <>
-                  {SKILL_CATEGORIES.map((category) => (
+                  {dynamicSkillCategories.map((category) => (
                     <option key={category} value={category}>{category}</option>
                   ))}
                 </>
@@ -857,6 +926,7 @@ export default function AdminDashboard() {
         setNewSkill={setNewSkill}
         handleSaveSkill={handleSaveSkill}
         loading={loading}
+        dynamicSkillCategories={dynamicSkillCategories}
       />
       <AdminCategoryModal
         isOpen={isCategoryModalOpen}
@@ -865,6 +935,14 @@ export default function AdminDashboard() {
         handleRenameCategory={handleRenameCategory}
         handleDeleteCategory={handleDeleteCategory}
         handleAddCategory={handleAddCategory}
+      />
+      <AdminSkillCategoryModal
+        isOpen={isSkillCategoryModalOpen}
+        onClose={() => setIsSkillCategoryModalOpen(false)}
+        predefinedSkillCategories={predefinedSkillCategories}
+        handleRenameSkillCategory={handleRenameSkillCategory}
+        handleDeleteSkillCategory={handleDeleteSkillCategory}
+        handleAddSkillCategory={handleAddSkillCategory}
       />
     </div>
   );

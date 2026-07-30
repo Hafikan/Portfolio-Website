@@ -8,18 +8,31 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import HoverSpotlight from "../ui/HoverSpotlight";
 
-const MarqueeRow = ({ 
-  items, 
-  speed = 40, 
-  direction = "left" 
-}: { 
-  items: any[], 
-  speed?: number, 
-  direction?: "left" | "right" 
+const skillIconFallback = (item: any, categoryIcons: Record<string, string>) => (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const img = e.currentTarget;
+  const categoryIcon = categoryIcons[item.category];
+  if (img.dataset.fallback !== "category" && categoryIcon) {
+    img.dataset.fallback = "category";
+    img.src = `https://cdn.simpleicons.org/${categoryIcon}${item.white ? '/white' : ''}`;
+  } else {
+    img.src = "/favicon.ico";
+  }
+};
+
+const MarqueeRow = ({
+  items,
+  categoryIcons,
+  speed = 40,
+  direction = "left"
+}: {
+  items: any[],
+  categoryIcons: Record<string, string>,
+  speed?: number,
+  direction?: "left" | "right"
 }) => {
   if (!items || items.length === 0) return null;
   return (
-    <div 
+    <div
       className="flex w-full overflow-hidden relative py-3"
       style={{ WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)", maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)" }}
     >
@@ -30,20 +43,20 @@ const MarqueeRow = ({
         transition={{ duration: speed, repeat: Infinity, ease: "linear" }}
       >
         {[...items, ...items, ...items].map((item, idx) => (
-          <HoverSpotlight 
+          <HoverSpotlight
             key={`${item.id}-${idx}`}
             className="rounded-xl glass-effect hover:border-zinc-700 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] transition-all duration-300 cursor-default group"
             innerClassName="flex items-center gap-4 px-6 py-5 w-full h-full"
           >
             <div className="w-8 h-8 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center drop-shadow-md">
-              <img 
-                src={`https://cdn.simpleicons.org/${item.slug}${item.white ? '/white' : ''}`} 
+              <img
+                src={`https://cdn.simpleicons.org/${item.slug}${item.white ? '/white' : ''}`}
                 alt={item.name}
                 className="w-full h-full object-contain p-0.5"
                 width={32}
                 height={32}
                 loading="lazy"
-                onError={(e) => (e.currentTarget.src = "/favicon.ico")}
+                onError={skillIconFallback(item, categoryIcons)}
               />
             </div>
             <span className="text-xl font-semibold text-zinc-300 group-hover:text-white transition-colors tracking-tight">
@@ -58,6 +71,7 @@ const MarqueeRow = ({
 
 export default function Skills() {
   const [skills, setSkills] = useState<any[]>([]);
+  const [categoryIcons, setCategoryIcons] = useState<Record<string, string>>({});
   const [showAll, setShowAll] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -66,6 +80,16 @@ export default function Skills() {
       .then(res => res.json())
       .then(data => setSkills(data))
       .catch(err => console.error("Failed to fetch skills", err));
+
+    fetch("/api/config")
+      .then(res => res.json())
+      .then(data => {
+        const entries = (data.skillCategories || []).map((c: any) => typeof c === 'string' ? { name: c, icon: "" } : c);
+        const map: Record<string, string> = {};
+        entries.forEach((c: any) => { if (c.icon) map[c.name] = c.icon; });
+        setCategoryIcons(map);
+      })
+      .catch(err => console.error("Failed to fetch config", err));
   }, []);
 
   const categories = useMemo(() => {
@@ -111,9 +135,9 @@ export default function Skills() {
               transition={{ duration: 0.4 }}
               className="w-full flex flex-col gap-2"
             >
-              <MarqueeRow items={row1} speed={45} direction="left" />
-              <MarqueeRow items={row2} speed={55} direction="right" />
-              <MarqueeRow items={row3} speed={40} direction="left" />
+              <MarqueeRow items={row1} categoryIcons={categoryIcons} speed={45} direction="left" />
+              <MarqueeRow items={row2} categoryIcons={categoryIcons} speed={55} direction="right" />
+              <MarqueeRow items={row3} categoryIcons={categoryIcons} speed={40} direction="left" />
             </motion.div>
           ) : (
             <motion.div 
@@ -196,13 +220,13 @@ export default function Skills() {
                       >
                         <div className="w-12 h-12 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center drop-shadow-md">
                           <img 
-                            src={`https://cdn.simpleicons.org/${skill.slug}${skill.white ? '/white' : ''}`} 
+                            src={`https://cdn.simpleicons.org/${skill.slug}${skill.white ? '/white' : ''}`}
                             alt={skill.name}
                             className="w-full h-full object-contain p-1"
                             width={48}
                             height={48}
                             loading="lazy"
-                            onError={(e) => (e.currentTarget.src = "/favicon.ico")}
+                            onError={skillIconFallback(skill, categoryIcons)}
                           />
                         </div>
                         <span className="text-sm font-semibold text-zinc-300 group-hover:text-white transition-colors text-center">

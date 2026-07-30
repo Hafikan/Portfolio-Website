@@ -4,6 +4,7 @@ import { db, isFirebaseConfigured } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import fs from "fs/promises";
 import path from "path";
+import { SKILL_CATEGORIES } from "@/lib/projects";
 
 const CONFIG_PATH = path.join(process.cwd(), "src/data/config.json");
 
@@ -12,7 +13,12 @@ async function getLocalConfig() {
     const data = await fs.readFile(CONFIG_PATH, "utf8");
     return JSON.parse(data);
   } catch (error) {
-    return { employed: false, categories: [{name: "Mobile App", imageType: "phone"}, {name: "Embedded Systems", imageType: "embedded"}, {name: "AI Product", imageType: "desktop"}, {name: "Website", imageType: "desktop"}], socials: { email: "", github: "", linkedin: "", twitter: "" } };
+    return {
+      employed: false,
+      categories: [{name: "Mobile App", imageType: "phone"}, {name: "Embedded Systems", imageType: "embedded"}, {name: "AI Product", imageType: "desktop"}, {name: "Website", imageType: "desktop"}],
+      skillCategories: SKILL_CATEGORIES.map((name) => ({ name, icon: "" })),
+      socials: { email: "", github: "", linkedin: "", twitter: "" },
+    };
   }
 }
 
@@ -42,13 +48,14 @@ export async function PUT(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { employed, categories, socials } = body;
+    const { employed, categories, skillCategories, socials } = body;
 
     // Merge onto the existing config so updating one field doesn't wipe the others.
     const current = await getLocalConfig();
     const newConfig: any = { ...current };
     if (employed !== undefined) newConfig.employed = !!employed;
     if (categories !== undefined) newConfig.categories = categories;
+    if (skillCategories !== undefined) newConfig.skillCategories = skillCategories;
     if (socials !== undefined) newConfig.socials = { ...(current.socials || {}), ...socials };
 
     // Always write to local config first for robustness in local/dev setup
