@@ -34,7 +34,7 @@ export default function AdminProjectModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="bg-zinc-900 border border-zinc-800 rounded-lg w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         <div className="px-6 py-4 border-b border-zinc-800 flex justify-between items-center bg-zinc-950">
           <h2 className="text-lg font-semibold">{editingProjectId ? "Edit Project" : "Add New Project"}</h2>
           <button onClick={onClose} className="p-1 text-zinc-400 hover:text-white rounded-md hover:bg-zinc-800 transition-colors">
@@ -58,7 +58,7 @@ export default function AdminProjectModal({
               <textarea 
                 value={newProject.description || ""}
                 onChange={(e) => setNewProject({...newProject, description: e.target.value})}
-                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 resize-none"
+                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors min-h-32 resize-y"
               />
             </div>
             <div>
@@ -66,7 +66,7 @@ export default function AdminProjectModal({
               <textarea 
                 value={newProject.overview || ""}
                 onChange={(e) => setNewProject({...newProject, overview: e.target.value})}
-                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 resize-none"
+                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors min-h-32 resize-y"
               />
             </div>
             <div>
@@ -74,7 +74,7 @@ export default function AdminProjectModal({
               <textarea 
                 value={newProject.problem || ""}
                 onChange={(e) => setNewProject({...newProject, problem: e.target.value})}
-                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 resize-none"
+                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors min-h-32 resize-y"
               />
             </div>
             <div>
@@ -82,7 +82,7 @@ export default function AdminProjectModal({
               <textarea 
                 value={newProject.solution || ""}
                 onChange={(e) => setNewProject({...newProject, solution: e.target.value})}
-                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 resize-none"
+                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors min-h-32 resize-y"
               />
             </div>
             <div>
@@ -90,7 +90,7 @@ export default function AdminProjectModal({
               <textarea 
                 value={newProject.approach || ""}
                 onChange={(e) => setNewProject({...newProject, approach: e.target.value})}
-                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 resize-none"
+                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors min-h-32 resize-y"
               />
             </div>
             <div>
@@ -98,7 +98,7 @@ export default function AdminProjectModal({
               <textarea 
                 value={newProject.learnings || ""}
                 onChange={(e) => setNewProject({...newProject, learnings: e.target.value})}
-                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 resize-none"
+                className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors min-h-32 resize-y"
               />
             </div>
             <div>
@@ -261,7 +261,7 @@ export default function AdminProjectModal({
                       value={newProject.architectureDiagram || ""}
                       onChange={(e) => setNewProject({...newProject, architectureDiagram: e.target.value})}
                       placeholder="graph TD;&#10;  A[Frontend] --> B[Backend];"
-                      className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 font-mono text-xs resize-y"
+                      className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors min-h-24 font-mono text-xs resize-y"
                     />
                   </div>
 
@@ -271,7 +271,7 @@ export default function AdminProjectModal({
                       value={newProject.databaseSchema || ""}
                       onChange={(e) => setNewProject({...newProject, databaseSchema: e.target.value})}
                       placeholder="erDiagram;&#10;  USER ||--o{ POST : writes"
-                      className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 font-mono text-xs resize-y"
+                      className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors min-h-24 font-mono text-xs resize-y"
                     />
                   </div>
 
@@ -281,7 +281,7 @@ export default function AdminProjectModal({
                       value={newProject.stateManagement || ""}
                       onChange={(e) => setNewProject({...newProject, stateManagement: e.target.value})}
                       placeholder="Describe the state management approach (e.g., Zustand with global slice, local React state for modal forms)..."
-                      className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors h-24 resize-y"
+                      className="w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors min-h-24 resize-y"
                     />
                   </div>
 
@@ -333,7 +333,7 @@ export default function AdminProjectModal({
                           placeholder="Describe the challenge..."
                           value={challengeInput.description}
                           onChange={(e) => setChallengeInput({ ...challengeInput, description: e.target.value })}
-                          className="w-full px-3 py-1.5 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none text-xs transition-colors h-14 resize-none"
+                          className="w-full px-3 py-1.5 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none text-xs transition-colors min-h-14 resize-y"
                         />
                       </div>
                       <div>
@@ -341,7 +341,7 @@ export default function AdminProjectModal({
                           placeholder="Explain your solution..."
                           value={challengeInput.solution}
                           onChange={(e) => setChallengeInput({ ...challengeInput, solution: e.target.value })}
-                          className="w-full px-3 py-1.5 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none text-xs transition-colors h-14 resize-none"
+                          className="w-full px-3 py-1.5 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none text-xs transition-colors min-h-14 resize-y"
                         />
                       </div>
                       <button
