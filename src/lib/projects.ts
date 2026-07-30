@@ -33,7 +33,7 @@ export const PROJECT_CATEGORIES = [
 
 export const SKILL_CATEGORIES = [
   "Embedded Systems",
-  "Unmanned Aerial Vehicles",
+  "Distributed Systems",
 ] as const;
 
 export const DEFAULT_PROJECT_CATEGORY = PROJECT_CATEGORIES[0];
