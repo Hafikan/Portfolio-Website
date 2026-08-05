@@ -1,0 +1,80 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: portfolio-website:latest
+    container_name: portfolio-web
+    restart: unless-stopped
+
+    # ------------------------------------------------------------------
+    # !! UFW SAFETY — DO NOT CHANGE TO "3000:3000" !!
+    #
+    # Docker writes its own DNAT rules into the iptables nat table, which are
+    # traversed BEFORE ufw's filter rules. A plain "3000:3000" publishes the
+    # port on 0.0.0.0 and is reachable from the internet even with
+    # `ufw deny 3000` or a default-deny incoming policy — ufw never sees it.
+    #
+    # Binding the host side to 127.0.0.1 means the DNAT target is the loopback
+    # interface, so only processes on the host (i.e. your reverse proxy) can
+    # reach it. Nothing is exposed to the network by Docker at all.
+    # See DOCKER.md for the reverse-proxy setup and for the alternative
+    # DOCKER-USER approach.
+    # ------------------------------------------------------------------
+    ports:
+      - "127.0.0.1:3000:3000"
+
+    env_file:
+      - .env.docker
+
+    volumes:
+      # Admin-managed JSON registries (projects, skills, site config).
+      - portfolio-data:/app/src/data
+      # Images uploaded through the admin panel.
+      - portfolio-uploads:/app/public/uploads
+
+    # ------------------------------------------------------------------
+    # Hardening
+    # ------------------------------------------------------------------
+    # Block setuid binaries from gaining privileges (blunts most container
+    # escape-via-suid paths).
+    security_opt:
+      - no-new-privileges:true
+
+    # The Node server needs no Linux capabilities: it binds 3000 (>1024) and
+    # runs as uid 1000.
+    cap_drop:
+      - ALL
+
+    # Immutable root filesystem. Everything the app legitimately writes is a
+    # volume or tmpfs below, so any write outside those paths is a bug or an
+    # intrusion — and it fails.
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+      # Next's incremental/fetch cache. Ephemeral by design; regenerated on boot.
+      - /app/.next/cache:rw,noexec,nosuid,uid=1000,gid=1000,size=256m
+
+    # Keep a runaway render loop from taking the whole server down.
+    # Both limits live under deploy.resources: compose rejects a top-level
+    # `pids_limit` set alongside a deploy.resources block.
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          pids: 256
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  # Explicit `name:` pins the volume identity. Without it compose prefixes the
+  # project (directory) name, so cloning into a differently-named folder would
+  # silently create empty volumes and the site would come up blank.
+  portfolio-data:
+    name: portfolio-data
+  portfolio-uploads:
+    name: portfolio-uploads

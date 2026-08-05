@@ -32,6 +32,11 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...but the Docker env template holds no secrets and must be committed.
+!.env.docker.example
+
+# runtime data written by the admin panel (lives in Docker volumes in prod)
+/public/uploads/
 
 # vercel
 .vercel
