@@ -54,8 +54,8 @@ export default function Projects({ limit }: { limit?: number }) {
           Featured <span className="text-zinc-500">Works</span>
         </h2>
         <p className="text-muted text-lg max-w-2xl mx-auto text-balance mb-10">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          From flight-grade desktop tooling to embedded systems and simulation
+          &mdash; a look at what I&apos;ve shipped.
         </p>
 
         {/* Controls Row */}

@@ -118,8 +118,8 @@ export default function Skills() {
           Technical <span className="text-zinc-500">Ecosystem</span>
         </h2>
         <p className="text-muted text-lg max-w-2xl mx-auto text-balance">
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris,
-          nisi ut aliquip ex ea commodo consequat duis aute irure.
+          The tools I reach for most &mdash; picked for what they do well under
+          real constraints, not for what&apos;s trending.
         </p>
       </FadeIn>
 
