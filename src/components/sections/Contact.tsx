@@ -64,8 +64,8 @@ const Contact = () => {
       >
         <h2 className="text-4xl md:text-6xl font-black mb-5 tracking-tighter leading-none">Get In Touch</h2>
         <p className="text-zinc-300 text-lg max-w-2xl mx-auto leading-relaxed text-balance">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          I&apos;m currently open to new opportunities and collaborations.
+          Whether you have a project in mind or just want to say hi, feel free to reach out!
         </p>
       </motion.div>
 

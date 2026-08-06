@@ -34,20 +34,14 @@ export default function About() {
               Engineering <span className="text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.3)]">precision</span>.<br />
               Digital <span className="text-zinc-400">simplicity</span>.
             </h3>
-            <div className="space-y-6">
-              <p className="text-base text-zinc-300 leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                aliquip ex ea commodo consequat.
-              </p>
-              <p className="text-base text-zinc-300 leading-relaxed">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident.
-              </p>
-              <p className="text-base text-zinc-300 leading-relaxed">
-                Sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.
-              </p>
-            </div>
+            <p className="text-base text-zinc-300 leading-relaxed">
+              Specialized in unmanned aerial vehicle systems and real-time embedded
+              software development. Experienced in designing production-grade Qt/C++
+              desktop applications, low-latency telemetry infrastructures, and
+              cross-platform build systems. Over five years of hands-on involvement in
+              CI/CD pipeline architecture, static analysis integration, crash analysis
+              infrastructures, and Docker-based simulation projects.
+            </p>
           </div>
         </FadeIn>
 
@@ -77,7 +71,8 @@ export default function About() {
               <div>
                 <h4 className="text-2xl font-medium text-white tracking-tight mb-3">Silicon & AI</h4>
                 <p className="text-sm text-zinc-400 leading-relaxed font-light">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Where silicon meets autonomy — compact inference on ARM-based flight
+                  hardware, tuned for deterministic latency rather than raw throughput.
                 </p>
               </div>
 
