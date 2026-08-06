@@ -45,8 +45,8 @@ export default function Hero() {
       <section className="relative min-h-screen w-full flex items-center overflow-hidden opacity-0 pointer-events-none">
         <div className="absolute pointer-events-none select-none">
           <h1>Hafıkan Yeşilyurt.</h1>
-          <p>Lorem ipsum dolor sit amet consectetur adipiscing elit</p>
-          <p>Sed do eiusmod tempor incididunt ut labore.</p>
+          <p>Unmanned aerial vehicle systems and real-time embedded software.</p>
+          <p>Qt/C++ desktop applications, low-latency telemetry, and CI/CD infrastructure.</p>
         </div>
       </section>
     );
@@ -68,7 +68,7 @@ export default function Hero() {
       {/* MOBILE HERO (OLD DESIGN) */}
       <div className="flex md:hidden relative z-10 text-center px-6 max-w-4xl flex-col items-center justify-center w-full h-full pointer-events-auto">
         <FadeIn delay={0.1}>
-          <h1 className="text-4xl font-bold tracking-tighter leading-none mb-4 whitespace-nowrap">
+          <h1 className="text-4xl font-bold tracking-tighter leading-none mb-8 whitespace-nowrap">
             Hi, I&apos;m{" "}
             <span className="relative inline-block">
               <span
@@ -100,14 +100,8 @@ export default function Hero() {
           </h1>
         </FadeIn>
 
-        <FadeIn delay={0.2}>
-          <h2 className="text-2xl font-medium tracking-tight text-zinc-400 mb-8 max-w-3xl mx-auto leading-tight">
-            Lorem ipsum <span className="text-white font-semibold">dolor sit amet</span> consectetur.
-          </h2>
-        </FadeIn>
-
         <TextReveal delay={1.0} className="text-lg text-muted mb-10 max-w-2xl mx-auto text-balance justify-center text-center">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud.
+          Unmanned aerial vehicle systems and real-time embedded software.
         </TextReveal>
 
         <FadeIn delay={0.4}>
@@ -231,12 +225,6 @@ export default function Hero() {
               </div>
             </FadeIn>
           </div>
-
-          <FadeIn delay={0.4} className="mt-auto mb-4 max-w-5xl">
-            <p className="text-2xl md:text-3xl lg:text-4xl text-zinc-500 leading-tight font-light text-balance">
-              Lorem ipsum <span className="text-white font-semibold">dolor sit amet</span> sed <span className="text-emerald-400 italic font-medium">consectetur adipiscing</span>
-            </p>
-          </FadeIn>
         </div>
 
         {/* RIGHT COLUMN - Terminal & Actions */}
@@ -280,7 +268,7 @@ export default function Hero() {
                   <div className="text-zinc-500 mb-1.5">$ whoami</div>
                   <div className="text-cyan-400 mb-3">hafikan_yesilyurt</div>
                   <div className="text-zinc-500 mb-1.5">$ get_status --current</div>
-                  <div className="text-white">Lorem ipsum dolor sit amet...</div>
+                  <div className="text-white">OK &mdash; telemetry nominal, builds green</div>
                   <motion.div animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.8, repeat: Infinity }} className="w-2 h-3.5 bg-cyan-500 mt-2" />
                 </div>
               </div>
