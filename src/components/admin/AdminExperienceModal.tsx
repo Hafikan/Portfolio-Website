@@ -1,5 +1,6 @@
 import React from "react";
 import { X, Save } from "lucide-react";
+import { MONTH_NAMES } from "@/lib/experience";
 
 // Form state: highlights are one bullet per line, tech is comma-separated.
 // The API normalizes both into arrays (src/lib/experience.ts).
@@ -37,6 +38,47 @@ interface AdminExperienceModalProps {
 
 const inputClass =
   "w-full px-3 py-2 rounded-md bg-zinc-950 border border-zinc-800 focus:border-zinc-600 focus:outline-none transition-colors";
+
+const CURRENT_YEAR = new Date().getFullYear();
+const YEARS = Array.from({ length: CURRENT_YEAR - 1969 }, (_, i) => String(CURRENT_YEAR - i));
+
+// Month + year selects instead of <input type="month">: Firefox renders that as a
+// plain text box, and free-typed dates fail the API's YYYY-MM validation.
+function MonthSelect({
+  value,
+  onChange,
+  required,
+  disabled,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+  disabled?: boolean;
+}) {
+  const [year = "", month = ""] = value.split("-");
+  const update = (y: string, m: string) => onChange(y || m ? `${y}-${m}` : "");
+  // A month without a year (or vice versa) is incomplete, so require both once either is set.
+  const needsBoth = !disabled && (required || !!year || !!month);
+  const selectClass = `${inputClass} [color-scheme:dark] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed`;
+
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      <select value={month} onChange={(e) => update(year, e.target.value)} className={selectClass} required={needsBoth} disabled={disabled}>
+        <option value="">Month</option>
+        {MONTH_NAMES.map((name, i) => {
+          const v = String(i + 1).padStart(2, "0");
+          return <option key={v} value={v}>{name}</option>;
+        })}
+      </select>
+      <select value={year} onChange={(e) => update(e.target.value, month)} className={selectClass} required={needsBoth} disabled={disabled}>
+        <option value="">Year</option>
+        {YEARS.map((y) => (
+          <option key={y} value={y}>{y}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
 
 export default function AdminExperienceModal({
   isOpen,
@@ -93,28 +135,21 @@ export default function AdminExperienceModal({
                 placeholder="e.g., Ankara, TR · Hybrid"
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-zinc-400 mb-1">Start</label>
-                <input
-                  type="month"
-                  value={newExperience.startDate}
-                  onChange={(e) => setNewExperience({ ...newExperience, startDate: e.target.value })}
-                  className={`${inputClass} [color-scheme:dark]`}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-zinc-400 mb-1">End</label>
-                <input
-                  type="month"
-                  value={newExperience.current ? "" : newExperience.endDate}
-                  min={newExperience.startDate || undefined}
-                  onChange={(e) => setNewExperience({ ...newExperience, endDate: e.target.value })}
-                  className={`${inputClass} [color-scheme:dark] disabled:opacity-40`}
-                  disabled={newExperience.current}
-                />
-              </div>
+            <div>
+              <label className="block text-zinc-400 mb-1">Start</label>
+              <MonthSelect
+                value={newExperience.startDate}
+                onChange={(startDate) => setNewExperience({ ...newExperience, startDate })}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-zinc-400 mb-1">End</label>
+              <MonthSelect
+                value={newExperience.current ? "" : newExperience.endDate}
+                onChange={(endDate) => setNewExperience({ ...newExperience, endDate })}
+                disabled={newExperience.current}
+              />
             </div>
             <div className="flex items-center gap-2">
               <input
