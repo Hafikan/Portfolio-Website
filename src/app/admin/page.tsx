@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, LogOut, Save, ExternalLink, Upload, Image as ImageIcon, X, Search, Filter, Edit2, LayoutTemplate, Wrench, GripVertical, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Trash2, LogOut, Save, ExternalLink, Upload, Image as ImageIcon, X, Search, Filter, Edit2, LayoutTemplate, Wrench, Briefcase, GripVertical, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
 import AdminCategoryModal from "@/components/admin/AdminCategoryModal";
 import AdminSkillCategoryModal from "@/components/admin/AdminSkillCategoryModal";
 import AdminSkillModal from "@/components/admin/AdminSkillModal";
 import AdminProjectModal from "@/components/admin/AdminProjectModal";
+import AdminExperienceModal, { EMPTY_EXPERIENCE_FORM, type ExperienceForm } from "@/components/admin/AdminExperienceModal";
+import { formatPeriod, type Experience } from "@/lib/experience";
 import { toast } from "@/components/ui/Toast";
 import {
   DEFAULT_PROJECT_CATEGORY,
@@ -20,9 +22,10 @@ import { SOCIAL_FIELDS, DEFAULT_SOCIALS, type Socials } from "@/lib/socials";
 type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<"projects" | "skills">("projects");
+  const [activeTab, setActiveTab] = useState<"projects" | "skills" | "experience">("projects");
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [experience, setExperience] = useState<Experience[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   
@@ -61,6 +64,11 @@ export default function AdminDashboard() {
     category: DEFAULT_SKILL_CATEGORY as string,
     white: false
   });
+
+  // Experience Modal
+  const [isExperienceModalOpen, setIsExperienceModalOpen] = useState(false);
+  const [editingExperienceId, setEditingExperienceId] = useState<string | null>(null);
+  const [newExperience, setNewExperience] = useState<ExperienceForm>(EMPTY_EXPERIENCE_FORM);
 
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState("");
@@ -101,6 +109,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchProjects();
     fetchSkills();
+    fetchExperience();
     fetchConfig();
   }, []);
 
@@ -299,6 +308,16 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchExperience = async () => {
+    try {
+      const res = await fetch("/api/experience");
+      const data = await res.json();
+      setExperience(data);
+    } catch (error) {
+      toast("Failed to fetch experience.", "error");
+    }
+  };
+
   const handleSaveProject = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -360,6 +379,35 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSaveExperience = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const method = editingExperienceId ? "PUT" : "POST";
+    const url = editingExperienceId ? `/api/experience/${editingExperienceId}` : "/api/experience";
+
+    try {
+      const res = await fetch(url, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newExperience),
+      });
+
+      if (res.ok) {
+        toast(editingExperienceId ? "Experience updated successfully!" : "Experience added successfully!", "success");
+        closeExperienceModal();
+        await fetchExperience();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast(data.error || (editingExperienceId ? "Failed to update experience." : "Failed to add experience."), "error");
+      }
+    } catch (error) {
+      toast("An unexpected error occurred.", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const openEditProjectModal = (project: any) => {
     setEditingProjectId(project.id);
     setNewProject({
@@ -398,6 +446,21 @@ export default function AdminDashboard() {
     setIsSkillModalOpen(true);
   };
 
+  const openEditExperienceModal = (entry: Experience) => {
+    setEditingExperienceId(entry.id);
+    setNewExperience({
+      company: entry.company,
+      role: entry.role,
+      location: entry.location || "",
+      startDate: entry.startDate || "",
+      endDate: entry.endDate || "",
+      current: !!entry.current,
+      highlights: (entry.highlights || []).join("\n"),
+      tech: (entry.tech || []).join(", "),
+    });
+    setIsExperienceModalOpen(true);
+  };
+
   const closeProjectModal = () => {
     setIsProjectModalOpen(false);
     setEditingProjectId(null);
@@ -431,6 +494,12 @@ export default function AdminDashboard() {
     setNewSkill({ name: "", slug: "", category: DEFAULT_SKILL_CATEGORY as string, white: false });
   };
 
+  const closeExperienceModal = () => {
+    setIsExperienceModalOpen(false);
+    setEditingExperienceId(null);
+    setNewExperience(EMPTY_EXPERIENCE_FORM);
+  };
+
   const handleDeleteProject = async (id: string) => {
     if (!confirm("Are you sure you want to delete this project?")) return;
     setLoading(true);
@@ -459,6 +528,24 @@ export default function AdminDashboard() {
         await fetchSkills();
       } else {
         toast("Failed to delete skill.", "error");
+      }
+    } catch (error) {
+      toast("An unexpected error occurred.", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteExperience = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this experience entry?")) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/experience?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+      if (res.ok) {
+        toast("Experience deleted successfully.", "success");
+        await fetchExperience();
+      } else {
+        toast("Failed to delete experience.", "error");
       }
     } catch (error) {
       toast("An unexpected error occurred.", "error");
@@ -584,6 +671,14 @@ export default function AdminDashboard() {
     });
   }, [skills, searchQuery, categoryFilter]);
 
+  const filteredExperience = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    return experience.filter((e) =>
+      e.company.toLowerCase().includes(query) ||
+      e.role.toLowerCase().includes(query)
+    );
+  }, [experience, searchQuery]);
+
   if (loading && projects.length === 0 && skills.length === 0) return <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">Loading...</div>;
 
   return (
@@ -596,17 +691,19 @@ export default function AdminDashboard() {
             <p className="text-sm text-zinc-400">Manage your portfolio projects and configurations.</p>
           </div>
           <div className="flex gap-3">
+            {activeTab !== 'experience' && (
+              <button
+                onClick={() => activeTab === 'projects' ? setIsCategoryModalOpen(true) : setIsSkillCategoryModalOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-300 font-medium hover:bg-zinc-700 hover:text-white transition-colors text-sm"
+              >
+                <LayoutTemplate size={16} /> Manage Categories
+              </button>
+            )}
             <button
-              onClick={() => activeTab === 'projects' ? setIsCategoryModalOpen(true) : setIsSkillCategoryModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-300 font-medium hover:bg-zinc-700 hover:text-white transition-colors text-sm"
-            >
-              <LayoutTemplate size={16} /> Manage Categories
-            </button>
-            <button 
-              onClick={() => activeTab === 'projects' ? setIsProjectModalOpen(true) : activeTab === 'skills' ? setIsSkillModalOpen(true) : null}
+              onClick={() => activeTab === 'projects' ? setIsProjectModalOpen(true) : activeTab === 'skills' ? setIsSkillModalOpen(true) : setIsExperienceModalOpen(true)}
               className="flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-100 text-zinc-900 font-medium hover:bg-zinc-200 transition-colors text-sm"
             >
-              <Plus size={16} /> New {activeTab === 'projects' ? 'Project' : 'Skill'}
+              <Plus size={16} /> New {activeTab === 'projects' ? 'Project' : activeTab === 'skills' ? 'Skill' : 'Experience'}
             </button>
             <button 
               onClick={handleLogout}
@@ -695,6 +792,12 @@ export default function AdminDashboard() {
           >
             <Wrench size={16} /> Skills
           </button>
+          <button
+            onClick={() => { setActiveTab("experience"); setCategoryFilter("All"); setSearchQuery(""); }}
+            className={`flex items-center gap-2 px-4 py-2 rounded-t-md text-sm font-medium transition-colors ${activeTab === "experience" ? "bg-zinc-800 text-white" : "text-zinc-500 hover:text-zinc-300"}`}
+          >
+            <Briefcase size={16} /> Experience
+          </button>
         </div>
 
         {/* Toolbar: Search and Filter */}
@@ -709,6 +812,7 @@ export default function AdminDashboard() {
               className="w-full pl-9 pr-4 py-2 rounded-md bg-zinc-950 border border-zinc-800 text-sm focus:border-zinc-600 focus:outline-none transition-colors"
             />
           </div>
+          {activeTab !== "experience" && (
           <div className="relative w-full sm:w-48">
             <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
             <select 
@@ -732,6 +836,7 @@ export default function AdminDashboard() {
               ) : null}
             </select>
           </div>
+          )}
         </div>
 
         {/* Data Table */}
@@ -892,6 +997,55 @@ export default function AdminDashboard() {
                   )}
                 </tbody>
               </table>
+            ) : activeTab === "experience" ? (
+              <table className="w-full text-left text-sm whitespace-nowrap">
+                <thead className="bg-zinc-950/50 border-b border-zinc-800 text-zinc-400">
+                  <tr>
+                    <th className="px-6 py-4 font-medium">Company</th>
+                    <th className="px-6 py-4 font-medium">Role</th>
+                    <th className="px-6 py-4 font-medium">Period</th>
+                    <th className="px-6 py-4 font-medium">Location</th>
+                    <th className="px-6 py-4 font-medium text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-800/50">
+                  {filteredExperience.map((entry) => (
+                    <tr key={entry.id} className="hover:bg-zinc-800/20 transition-colors">
+                      <td className="px-6 py-3">
+                        <p className="font-medium text-zinc-100">{entry.company}</p>
+                      </td>
+                      <td className="px-6 py-3 text-zinc-300">{entry.role}</td>
+                      <td className="px-6 py-3 text-zinc-400">{formatPeriod(entry)}</td>
+                      <td className="px-6 py-3 text-zinc-400">{entry.location || "—"}</td>
+                      <td className="px-6 py-3 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => openEditExperienceModal(entry)}
+                            className="p-1.5 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-white transition-colors"
+                            title="Edit"
+                          >
+                            <Edit2 size={14} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteExperience(entry.id)}
+                            className="p-1.5 rounded-md bg-red-950/30 border border-red-900/50 text-red-400 hover:bg-red-900/50 hover:text-red-300 transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {filteredExperience.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
+                        No experience entries found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             ) : null}
           </div>
         </div>
@@ -919,6 +1073,15 @@ export default function AdminDashboard() {
         handleSaveSkill={handleSaveSkill}
         loading={loading}
         dynamicSkillCategories={dynamicSkillCategories}
+      />
+      <AdminExperienceModal
+        isOpen={isExperienceModalOpen}
+        onClose={closeExperienceModal}
+        editingExperienceId={editingExperienceId}
+        newExperience={newExperience}
+        setNewExperience={setNewExperience}
+        handleSaveExperience={handleSaveExperience}
+        loading={loading}
       />
       <AdminCategoryModal
         isOpen={isCategoryModalOpen}

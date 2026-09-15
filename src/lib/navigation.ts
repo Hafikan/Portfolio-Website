@@ -1,4 +1,4 @@
-const SECTION_IDS = new Set(["about", "skills", "projects", "contact"]);
+const SECTION_IDS = new Set(["about", "experience", "skills", "projects", "contact"]);
 
 export function getCanonicalHash(hash: string) {
   const value = hash.replace(/^#/, "").split("#")[0];

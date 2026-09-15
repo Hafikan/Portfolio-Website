@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { User, Code2, FolderGit2, Mail, Terminal } from "lucide-react";
+import { User, Briefcase, Code2, FolderGit2, Mail, Terminal } from "lucide-react";
 import { useSoundEffect } from "@/hooks/useSoundEffect";
 import { usePathname } from "next/navigation";
 import Magnetic from "@/components/ui/Magnetic";
@@ -36,9 +36,16 @@ export default function Dock() {
       icon: User, 
       type: "link" as const,
       href: "#about", 
-      color: "from-blue-400 to-blue-600" 
+      color: "from-blue-400 to-blue-600"
     },
-    { 
+    {
+      name: "Experience",
+      icon: Briefcase,
+      type: "link" as const,
+      href: "#experience",
+      color: "from-cyan-400 to-cyan-600"
+    },
+    {
       name: "Skills", 
       icon: Code2, 
       type: "link" as const,

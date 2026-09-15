@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, FileText, Settings, AppWindow, CornerDownLeft, Lock } from "lucide-react";
+import { Search, FileText, Briefcase, Settings, AppWindow, CornerDownLeft, Lock } from "lucide-react";
 import { toast } from "../ui/Toast";
 import { scrollToSection } from "@/lib/navigation";
 
 const SPOTLIGHT_ITEMS = [
   { title: "About Hafıkan", category: "Navigation", desc: "Background, timeline, and professional bio", icon: FileText, action: "about" },
+  { title: "Work Experience", category: "Navigation", desc: "Companies, roles, and career timeline", icon: Briefcase, action: "experience" },
   { title: "Technical Ecosystem", category: "Navigation", desc: "Skills, frameworks, and programming languages", icon: Settings, action: "skills" },
   { title: "Featured Projects", category: "Navigation", desc: "Check out web, mobile, and embedded creations", icon: AppWindow, action: "projects" },
   { title: "Get in Touch", category: "Navigation", desc: "Contact details and social links", icon: FileText, action: "contact" },
@@ -55,7 +56,7 @@ export default function SpotlightSearch({
   const triggerSearchAction = (action: string) => {
     setIsSpotlightOpen(false);
 
-    if (["about", "skills", "projects", "contact"].includes(action)) {
+    if (["about", "experience", "skills", "projects", "contact"].includes(action)) {
       scrollToSection(action);
       toast(`Scrolled to ${action.toUpperCase()} section`, "success");
     } else if (action === "admin") {
