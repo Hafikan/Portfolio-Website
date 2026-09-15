@@ -6,6 +6,7 @@ import path from "path";
 
 const PROJECTS_PATH = path.join(process.cwd(), "src/data/projects.json");
 const SKILLS_PATH = path.join(process.cwd(), "src/data/skills.json");
+const EXPERIENCE_PATH = path.join(process.cwd(), "src/data/experience.json");
 
 // Write atomically: serialize to a temp file in the same directory, then rename
 // over the target. rename() is atomic on POSIX, so a concurrent reader never sees
@@ -51,6 +52,29 @@ export async function readSkillsFile(): Promise<any[]> {
 
 export async function writeSkillsFile(list: any[]): Promise<void> {
   await atomicWriteJson(SKILLS_PATH, list);
+}
+
+export function resolveExperienceId(e: any, idx: number): string {
+  const base = [e.company, e.role]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return e.id || base || `experience-${idx}`;
+}
+
+export async function readExperienceFile(): Promise<any[]> {
+  try {
+    const parsed = JSON.parse(await fs.readFile(EXPERIENCE_PATH, "utf8"));
+    return parsed.map((e: any, idx: number) => ({ ...e, id: resolveExperienceId(e, idx) }));
+  } catch {
+    return [];
+  }
+}
+
+export async function writeExperienceFile(list: any[]): Promise<void> {
+  await atomicWriteJson(EXPERIENCE_PATH, list);
 }
 
 // Ensure a candidate id is unique against a list of existing ids, suffixing -2, -3, ... if needed.

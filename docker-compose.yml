@@ -28,7 +28,7 @@ services:
       - .env.docker
 
     volumes:
-      # Admin-managed JSON registries (projects, skills, site config).
+      # Admin-managed JSON registries (projects, skills, experience, site config).
       - portfolio-data:/app/src/data
       # Images uploaded through the admin panel.
       - portfolio-uploads:/app/public/uploads

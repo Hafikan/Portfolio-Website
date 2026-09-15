@@ -69,6 +69,7 @@ export default function TerminalWindow() {
         output = (
           <ul className="grid grid-cols-2 gap-x-4 gap-y-1 my-2">
             <li><span className="text-emerald-300">about</span> - Who am I?</li>
+            <li><span className="text-emerald-300">experience</span> - Where I&apos;ve worked</li>
             <li><span className="text-emerald-300">projects</span> - View my work</li>
             <li><span className="text-emerald-300">contact</span> - Get in touch</li>
             <li><span className="text-emerald-300">clear</span> - Clear terminal</li>
@@ -80,6 +81,11 @@ export default function TerminalWindow() {
       case "about":
         output = "Navigating to About section...";
         scrollToSection("about");
+        setTimeout(() => closeWindow("terminal"), 800);
+        break;
+      case "experience":
+        output = "Navigating to Experience section...";
+        scrollToSection("experience");
         setTimeout(() => closeWindow("terminal"), 800);
         break;
       case "projects":
