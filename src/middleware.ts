@@ -14,7 +14,9 @@ export async function middleware(request: NextRequest) {
     const isValid = await verifySessionToken(token);
 
     if (!isValid) {
-      const loginUrl = new URL('/admin/login', request.url);
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = '/admin/login';
+      loginUrl.search = '';
       return NextResponse.redirect(loginUrl);
     }
   }
