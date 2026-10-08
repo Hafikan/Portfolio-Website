@@ -76,9 +76,17 @@ export async function GET(
 
   if (project) {
     const slug = project.id || project.title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    return NextResponse.redirect(new URL(`/projects/${slug}`, request.url));
+    return relativeRedirect(`/projects/${encodeURIComponent(slug)}`);
   }
 
   // Fallback to home page if not found
-  return NextResponse.redirect(new URL("/", request.url));
+  return relativeRedirect("/");
+}
+
+// Behind the Docker reverse proxy, request.url carries the standalone server's
+// bind address (http://0.0.0.0:3000), so an absolute redirect built from it
+// sends visitors to an unreachable internal host. A relative Location is
+// resolved by the browser against the public URL it actually requested.
+function relativeRedirect(location: string) {
+  return new NextResponse(null, { status: 307, headers: { Location: location } });
 }
