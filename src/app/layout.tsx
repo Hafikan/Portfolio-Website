@@ -4,13 +4,11 @@ import "./globals.css";
 import MenuBar from "@/components/layout/MenuBar";
 import Dock from "@/components/layout/Dock";
 import CustomCursor from "@/components/CustomCursor";
-import DynamicBackground from "@/components/ui/DynamicBackground";
 import ClientLayoutWrapper from "@/components/layout/ClientLayoutWrapper";
 import NoiseOverlay from "@/components/ui/NoiseOverlay";
 import ScrollToTop from "@/components/ui/ScrollToTop";
 import HashCanonicalizer from "@/components/layout/HashCanonicalizer";
-import TerminalWindow from "@/components/ui/TerminalWindow";
-import KonamiCode from "@/components/ui/KonamiCode";
+import { LazyBackground, LazyTerminal } from "@/components/layout/LazyExtras";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -56,10 +54,9 @@ export default function RootLayout({
         <ClientLayoutWrapper>
           <HashCanonicalizer />
           <NoiseOverlay />
-          <DynamicBackground />
+          <LazyBackground />
           <CustomCursor />
-          <TerminalWindow />
-          <KonamiCode />
+          <LazyTerminal />
           <MenuBar />
           {children}
           <Dock />

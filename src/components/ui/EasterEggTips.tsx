@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Lightbulb, X } from "lucide-react";
 
 const TIPS: { text: string; desktopOnly?: boolean }[] = [
-  { text: "Easter Egg: Try entering the Konami Code (↑ ↑ ↓ ↓ ← → ← → B A)" },
   { text: "Pro Tip: Press Cmd+K (or Ctrl+K) anywhere to instantly open Spotlight Search.", desktopOnly: true },
   { text: "Did you know? You can open the Terminal and type 'help' for a list of commands.", desktopOnly: true },
   { text: "Double-click any window's title bar to maximize it instantly.", desktopOnly: true },
