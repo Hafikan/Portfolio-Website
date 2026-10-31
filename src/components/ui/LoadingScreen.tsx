@@ -25,7 +25,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    const duration = 2800; 
+    const duration = 900; 
     const intervalTime = 30; 
     const steps = duration / intervalTime;
     let currentStep = 0;
@@ -54,7 +54,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           setIsVisible(false);
           const event = new CustomEvent('enterSite');
           window.dispatchEvent(event);
-        }, 400); 
+        }, 150); 
       }
     }, intervalTime);
 

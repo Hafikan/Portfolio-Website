@@ -2,9 +2,7 @@
 
 import React, { useState, useEffect, createContext, useContext } from "react";
 import LoadingScreen from "../ui/LoadingScreen";
-import OnboardingTour from "../ui/OnboardingTour";
-import PresenceCursors from "../ui/PresenceCursors";
-import EasterEggTips from "../ui/EasterEggTips";
+import { LazyOnboarding, LazyPresence, LazyEasterEggs } from "./LazyExtras";
 import SmoothScroll from "./SmoothScroll";
 
 const LoadingContext = createContext({ isSiteReady: false });
@@ -25,14 +23,14 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
     <LoadingContext.Provider value={{ isSiteReady }}>
       <SmoothScroll>
         {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
-        <div className={isLoading ? "opacity-0 pointer-events-none" : "opacity-100 transition-opacity duration-700 ease-out"}>
+        <div className={isLoading ? "pointer-events-none" : undefined}>
           {children}
         </div>
         {!isLoading && (
           <>
-            <OnboardingTour />
-            <PresenceCursors />
-            <EasterEggTips />
+            <LazyOnboarding />
+            <LazyPresence />
+            <LazyEasterEggs />
           </>
         )}
       </SmoothScroll>
